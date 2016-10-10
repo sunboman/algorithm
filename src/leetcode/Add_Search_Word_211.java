@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Created by sunbo_000 on 10/5/2016.
  */
-public class add_search_word_211 {
+public class Add_Search_Word_211 {
     public static class WordDictionary {
 
         TreeNode head = new TreeNode(false);

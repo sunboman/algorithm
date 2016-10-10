@@ -3,7 +3,7 @@ package leetcode;
 /**
  * Created by sunbo_000 on 10/3/2016.
  */
-public class count_bits_338 {
+public class Count_Bits_338 {
     /*
         if a num is the integer power of 2, the number of 1 is 1, or it is the previous one add one
      */
@@ -43,7 +43,7 @@ public class count_bits_338 {
     }
 
     public static void main(String[] args) {
-        count_bits_338 Solution = new count_bits_338();
+        Count_Bits_338 Solution = new Count_Bits_338();
         Solution.countBits(5);
         Solution.countBits2(8);
     }

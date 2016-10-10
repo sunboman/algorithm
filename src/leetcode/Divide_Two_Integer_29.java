@@ -3,7 +3,7 @@ package leetcode;
 /**
  * Created by sunbo_000 on 10/3/2016.
  */
-public class divide_two_integer_29 {
+public class Divide_Two_Integer_29 {
     public int divide(int dividend, int divisor) {
         if (divisor == 0) return Integer.MAX_VALUE;
         if (dividend == Integer.MIN_VALUE && divisor == -1) return Integer.MAX_VALUE;
@@ -23,7 +23,7 @@ public class divide_two_integer_29 {
     }
 
     public static void main(String[] args) {
-        divide_two_integer_29 Solution = new divide_two_integer_29();
+        Divide_Two_Integer_29 Solution = new Divide_Two_Integer_29();
         Solution.divide(-1,1);
     }
 }
