@@ -18,7 +18,7 @@ public class Generate_Parentheses_22 {
         if(left > right) return;
         StringBuilder sbLeft = new StringBuilder(str);
         StringBuilder sbRight = new StringBuilder(str);
-        if(left == 0 && right == 0 && left == right) {
+        if(left == 0 && right == 0) {
             result.add(str.toString());
             return;
         }
