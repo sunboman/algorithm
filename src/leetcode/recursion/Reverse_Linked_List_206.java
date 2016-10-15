@@ -1,8 +1,5 @@
 package leetcode.recursion;
 
-import leetcode.Merge_Two_Sorted_Lists_21;
-import leetcode.priority_queue.Merge_k_Sorted_Lists_23;
-
 /**
  * Created by sunbo_000 on 10/14/2016.
  */
@@ -20,11 +17,12 @@ public class Reverse_Linked_List_206 {
             val = x;
         }
     }
+
     /*
         Iterative
      */
     public ListNode reverseList(ListNode head) {
-        if(head == null || head.next == null) return head;
+        if (head == null || head.next == null) return head;
         ListNode l1 = head;
         ListNode l2 = l1.next;
         head.next = null;
@@ -42,8 +40,8 @@ public class Reverse_Linked_List_206 {
         Recursive
      */
     public ListNode reversList_recur(ListNode head) {
-        if(head == null || head.next == null) return head;
-        ListNode newHead = reverseList(head);
+        if (head == null || head.next == null) return head;
+        ListNode newHead = reversList_recur(head.next);
         head.next.next = head;
         head.next = null;
         return newHead;
