@@ -1,4 +1,4 @@
-package leetcode;
+package leetcode.binary_search;
 
 /**
  * Created by sunbo_000 on 10/13/2016.
