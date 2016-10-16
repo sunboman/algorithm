@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
-public class Solution {
+public class Valid_Parentheses_20 {
     public boolean isValid(String s) {
         Stack<Character> st = new Stack();
         List<Character> left = new ArrayList(Arrays.asList(new Character[]{'(','{','['}));
@@ -34,7 +34,7 @@ public class Solution {
     }
 
     public static void main(String[] args) {
-        Solution solution = new Solution();
+        Valid_Parentheses_20 solution = new Valid_Parentheses_20();
         solution.isValid("[");
     }
 }
