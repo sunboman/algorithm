@@ -11,8 +11,8 @@ public class Triangle_120 {
 
     public int minimumTotal(List<List<Integer>> triangle) {
 
-        int hight = triangle.size();
-        int length = triangle.get(hight - 1).size();
+        int height = triangle.size();
+        int length = triangle.get(height - 1).size();
         int[] n = new int[length];
 
         for (int i = 0; i < triangle.size(); i++) {
