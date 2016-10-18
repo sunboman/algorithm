@@ -1,4 +1,4 @@
-package leetcode;
+package leetcode.dp;
 
 /**
  * Created by sunbo_000 on 10/6/2016.

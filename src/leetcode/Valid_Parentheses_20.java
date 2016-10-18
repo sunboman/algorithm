@@ -8,19 +8,19 @@ import java.util.Stack;
 public class Valid_Parentheses_20 {
     public boolean isValid(String s) {
         Stack<Character> st = new Stack();
-        List<Character> left = new ArrayList(Arrays.asList(new Character[]{'(','{','['}));
-        for(int i=0;i<s.length();i++) {
-            if(left.contains(s.charAt(i))) st.push(s.charAt(i));
+        List<Character> left = new ArrayList(Arrays.asList(new Character[]{'(', '{', '['}));
+        for (int i = 0; i < s.length(); i++) {
+            if (left.contains(s.charAt(i))) st.push(s.charAt(i));
             else {
-                if(!validate(st.pop(),s.charAt(i))) return false;
+                if (!validate(st.pop(), s.charAt(i))) return false;
             }
         }
         return st.empty();
     }
-    
-    boolean validate(Character a,Character b) {
-        if(a==null || b==null) return false;
-        switch(a) {
+
+    boolean validate(Character a, Character b) {
+        if (a == null || b == null) return false;
+        switch (a) {
             case '(':
                 return b.equals(')');
             case '{':
@@ -29,7 +29,7 @@ public class Valid_Parentheses_20 {
                 return b.equals(']');
             default:
                 return false;
-                
+
         }
     }
 

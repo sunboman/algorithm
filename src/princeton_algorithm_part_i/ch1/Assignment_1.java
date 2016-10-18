@@ -1,4 +1,4 @@
-package princeton_algorithm_part_i.ch1.quiz1;
+package princeton_algorithm_part_i.ch1;
 
 /**
  * Created by sunbo_000 on 10/10/2016.

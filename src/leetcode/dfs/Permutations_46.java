@@ -1,4 +1,4 @@
-package leetcode.hashTable;
+package leetcode.dfs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +10,8 @@ public class Permutations_46 {
 
 
     public List<List<Integer>> permute(int[] nums) {
-        List<List<Integer>> result = new ArrayList<List<Integer>>();
-        List<Integer> numsList = new ArrayList<Integer>();
+        List<List<Integer>> result = new ArrayList<>();
+        List<Integer> numsList = new ArrayList<>();
 
         if (nums == null) {
             return result;
@@ -45,6 +45,5 @@ public class Permutations_46 {
         int[] nums = new int[]{1, 2, 3};
         Permutations_46 solution = new Permutations_46();
         List<List<Integer>> result = solution.permute(nums);
-        String a= "";
     }
 }
