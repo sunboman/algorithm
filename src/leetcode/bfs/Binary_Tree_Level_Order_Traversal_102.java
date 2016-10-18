@@ -76,7 +76,5 @@ public class Binary_Tree_Level_Order_Traversal_102 {
         Binary_Tree_Level_Order_Traversal_102 solution = new Binary_Tree_Level_Order_Traversal_102();
 
         List<List<Integer>> result = solution.levelOrder(three);
-
-        String stop = "";
     }
 }
