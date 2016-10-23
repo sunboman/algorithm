@@ -31,7 +31,9 @@ public class Reverse_Nodes_in_k_Group_25 {
             val = x;
         }
     }
-
+    /*
+        cut the list into several groups with k nodes then reverse them one by one and combine together
+     */
     public ListNode reverseKGroup(ListNode head, int k) {
         if (k <= 1 || head == null) return head;
         ListNode reverseHead = head;
