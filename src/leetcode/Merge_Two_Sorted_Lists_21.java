@@ -1,7 +1,5 @@
 package leetcode;
 
-import java.util.List;
-
 /**
  * Created by sunbo_000 on 10/13/2016.
  */
