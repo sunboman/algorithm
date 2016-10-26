@@ -1,9 +1,6 @@
 package leetcode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by bosun on 10/23/16.
@@ -70,7 +67,6 @@ public class Substring_with_Concatenation_of_All_Words_30 {
                 }
             }
         }
-
         return result;
 
     }
