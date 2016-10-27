@@ -5,30 +5,33 @@ package basic.advanced_sorting;
  */
 public class quick_sorting {
 
-    public static void quickSort(int[] array, int left, int right) {
-        if (left >= right) return;
-        int s = left;
-        int e = right;
-        int mid = (left + right) / 2;
-        int pivot = array[mid];
+    private static void quickSort(int[] nums, int start, int end) {
+        if (start < end) {
+            int index = partition(nums, start, end);
+            quickSort(nums, start, index - 1);
+            quickSort(nums, index + 1, end);
+        }
+    }
+
+    private static int partition(int[] nums, int left, int right) {
+        int pivot = nums[left];
         while (left < right) {
-            if (array[left] <= pivot) left++;
-            if (array[right] >= pivot) right--;
-            if (array[left] > pivot && array[right] < pivot) {
-                int tmp = array[right];
-                array[right] = array[left];
-                array[left] = tmp;
-                left++;
+            while (left < right && nums[right] >= pivot) {
                 right--;
             }
+            if (left < right) {
+                nums[left++] = nums[right];
+            }
+            while (left < right && nums[left] <= pivot) {
+                left++;
+            }
+            if (left < right) {
+                nums[right--] = nums[left];
+            }
         }
-        int tmp = array[mid];
-        array[mid] = array[left];
-        array[left] = tmp;
-        if (s < left)
-            quickSort(array, s, left - 1);
-        if (right < e)
-            quickSort(array, right, e);
+
+        nums[left] = pivot;
+        return left;
     }
 
     public static void Sort(int[] array) {
@@ -36,7 +39,7 @@ public class quick_sorting {
     }
 
     public static void main(String[] args) {
-        int[] array = {2, 5, 4, 1, 0, 85, 15};
+        int[] array = {3,1,2,-1,5,4,3};
         Sort(array);
         for (int i : array) {
             System.out.print(i + " ");

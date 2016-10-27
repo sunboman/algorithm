@@ -29,8 +29,6 @@ public class Symmetric_Tree_101 {
         if (left == null && right == null) return true;
         if (left == null || right == null) return false;
         if (left.val != right.val) return false;
-        if (left.left == null && left.right == null && right.left == null && right.left == null)
-            return left.val == right.val;
         return check(left.left, right.right) && check(left.right, right.left);
     }
 }

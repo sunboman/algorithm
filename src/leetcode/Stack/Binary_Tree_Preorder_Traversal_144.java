@@ -62,6 +62,5 @@ public class Binary_Tree_Preorder_Traversal_144 {
         three.right = two;
         three.left = one;
         List<Integer> result = new Binary_Tree_Preorder_Traversal_144().preorderTraversal(three);
-        String stop = "";
     }
 }
