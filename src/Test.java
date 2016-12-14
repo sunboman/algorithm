@@ -1480,10 +1480,770 @@ public class Test {
         nums[j] = nums[i];
         nums[i] = temp;
     }*/
-    public static void main(String[] args) {
-        new Test().findOrder(4, new int[][]{
-                        {0, 1}, {3, 1}, {1, 3}, {2, 1}
+    public String longestCommonPrefix(String[] strs) {
+        // write your code here
+        if (strs == null || strs.length == 0) {
+            return "";
+        }
+        if (strs.length == 1) {
+            return strs[0];
+        }
+        int index = 0;
+        StringBuffer sb = new StringBuffer();
+        int n = strs[0].length();
+        while (true) {
+            if (index >= n) {
+                break;
+            }
+            char c = strs[0].charAt(index);
+            for (int i = 0; i < strs.length; i++) {
+                if (index >= strs[i].length() || strs[i].charAt(index) != c) {
+                    return sb.toString();
                 }
-        );
+            }
+            sb.append(c);
+            index++;
+        }
+        return sb.toString();
+    }
+
+    public int atoi(String str) {
+        if (str == null) {
+            return 0;
+        }
+        str = str.trim();
+        str = str.split("\\.")[0];
+        if (str.length() == 0) {
+            return 0;
+        }
+        boolean negative = false;
+        boolean first = true;
+        if (str.charAt(0) == '-') {
+            negative = true;
+        }
+        int index = 0;
+        if (str.charAt(index) == '+' || str.charAt(index) == '-') {
+            first = false;
+            index++;
+        }
+        double result = 0.0;
+        while (index < str.length()) {
+            if (str.charAt(index) < '0' || str.charAt(index) > '9') {
+                if (!first) {
+                    return 0;
+                } else {
+                    break;
+                }
+            }
+            result = result * 10 + Integer.parseInt(String.valueOf(str.charAt(index++)));
+        }
+        if (negative) {
+            if (-result < Integer.MIN_VALUE) {
+                return Integer.MIN_VALUE;
+            } else {
+                return -(int) (result);
+            }
+        } else {
+            if (result > Integer.MAX_VALUE) {
+                return Integer.MAX_VALUE;
+            } else {
+                return (int) result;
+            }
+        }
+    }
+
+    public int removeElement(int[] A, int elem) {
+        // write your code here
+        if (A == null || A.length == 0) {
+            return 0;
+        }
+        int low = 0;
+        int high = A.length - 1;
+        while (low <= high) {
+            while (low <= high && A[high] == elem) {
+                high--;
+            }
+            while (low <= high && A[low] != elem) {
+                low++;
+            }
+            if (low <= high) {
+                swap(A, low, high--);
+            }
+        }
+        return low;
+    }
+
+    public ArrayList<Long> productExcludeItself(ArrayList<Integer> A) {
+        if (A == null || A.size() == 0) {
+            return new ArrayList<>(0);
+        }
+        int n = A.size();
+        ArrayList<Long> result = new ArrayList<>(n);
+        if (A.size() == 1) {
+            result.add(Long.valueOf(A.get(0)));
+            return result;
+        }
+        long[] f = new long[n];
+        f[n - 1] = A.get(n - 1);
+        for (int i = n - 2; i >= 0; i--) {
+            f[i] = A.get(i) * f[i + 1];
+        }
+        long[] p = new long[n];
+        p[0] = A.get(0);
+        for (int i = 1; i < n; i++) {
+            p[i] = A.get(i) * p[i - 1];
+        }
+        for (int i = 0; i < n; i++) {
+            if (i == 0) {
+                result.add(f[1]);
+            } else if (i == n - 1) {
+                result.add(p[n - 2]);
+            } else {
+                result.add(p[i - 1] * f[i + 1]);
+            }
+        }
+        return result;
+    }
+
+    public int sqrt2(int x) {
+        // write your code here
+        if (x <= 0) {
+            return 0;
+        }
+        if (x == 1) {
+            return 1;
+        }
+        long left = 1;
+        long right = x;
+        while (left + 1 < right) {
+            long mid = (left + right) >>> 1;
+            double temp = mid * mid;
+            if (temp == x) {
+                return (int) mid;
+            } else if (temp > x) {
+                right = mid;
+            } else {
+                left = mid;
+            }
+        }
+        return (int) left;
+    }
+
+    public boolean exist(char[][] board, String word) {
+        // write your code here
+        if (board == null || board.length == 0 || word == null || word.length() == 0) {
+            return false;
+        }
+        char c = word.charAt(0);
+        int n = board.length;
+        int m = board[0].length;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (board[i][j] == c) {
+                    if (dfs(board, word, 0, i, j)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean dfs(char[][] board, String word, int index, int i, int j) {
+        int n = board.length;
+        int m = board[0].length;
+        if (index == word.length()) {
+            return true;
+        }
+        if (i < 0 || i >= n || j < 0 || j >= m) {
+            return false;
+        }
+        if (board[i][j] != word.charAt(index)) {
+            return false;
+        }
+        board[i][j] = '*';
+        boolean res = dfs(board, word, index + 1, i + 1, j) ||
+                dfs(board, word, index + 1, i - 1, j) ||
+                dfs(board, word, index + 1, i, j + 1) ||
+                dfs(board, word, index + 1, i, j - 1);
+        board[i][j] = word.charAt(index);
+        return res;
+    }
+
+    static class Point {
+        int x;
+        int y;
+
+        Point() {
+            x = 0;
+            y = 0;
+        }
+
+        Point(int a, int b) {
+            x = a;
+            y = b;
+        }
+    }
+
+    public List<Integer> numIslands2(int n, int m, List<Point> operators) {
+        // Write your code here
+        if (operators == null || operators.size() == 0) {
+            return new ArrayList<>(0);
+        }
+        int[] root = new int[n * m];
+        Arrays.fill(root, -1);
+        int[][] directions = new int[][]{
+                {-1, 0}, {0, 1}, {1, 0}, {0, -1}
+        };
+        List<Integer> result = new ArrayList<>();
+        int count = 0;
+        for (Point point : operators) {
+            count++;
+            int index = point.x * m + point.y;
+            root[index] = index;
+            for (int i = 0; i < 4; i++) {
+                int x = point.x + directions[i][0];
+                int y = point.y + directions[i][1];
+                if (x < 0 || y < 0 || x >= n || y >= m || root[x * m + y] == -1) {
+                    continue;
+                }
+                int nRoot = findRoot(root, x * m + y);
+                if (nRoot != index) {
+                    root[nRoot] = index;
+                    count--;
+                }
+            }
+            result.add(count);
+        }
+        return result;
+    }
+
+    private int findRoot(int[] root, int a) {
+        while (root[a] != a) {
+            a = root[a];
+        }
+        return a;
+    }
+
+    public ArrayList<Integer> medianSlidingWindow(int[] nums, int k) {
+        // write your code here
+        if (nums == null || nums.length == 0) {
+            return new ArrayList<>();
+        }
+        int n = nums.length;
+        ArrayList<Integer> result = new ArrayList<>(n - k + 1);
+        if (k == 1) {
+            for (int num : nums) {
+                result.add(num);
+            }
+            return result;
+        }
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(new Comparator<Integer>() {
+            public int compare(Integer a, Integer b) {
+                return b - a;
+            }
+        });
+        maxHeap.offer(nums[0]);
+        for (int i = 1; i < k; i++) {
+            insert(minHeap, maxHeap, nums[i]);
+        }
+        for (int i = k - 1; i < n; i++) {
+            if (k % 2 != 0) {
+                result.add(maxHeap.peek());
+            } else {
+                int max = maxHeap.peek();
+                int min = minHeap.peek();
+                int median = Math.min(max, min);
+                result.add(median);
+            }
+            if (i < n - 1) {
+                remove(minHeap, maxHeap, nums[i - k + 1]);
+                insert(minHeap, maxHeap, nums[i + 1]);
+            }
+        }
+        return result;
+    }
+
+    private void insert(PriorityQueue<Integer> minHeap, PriorityQueue<Integer> maxHeap, Integer ele) {
+        if (maxHeap.isEmpty() && minHeap.isEmpty()) {
+            maxHeap.offer(ele);
+        }
+        int med = maxHeap.peek();
+        if (ele > med) {
+            minHeap.offer(ele);
+        } else {
+            maxHeap.offer(ele);
+        }
+        balance(minHeap, maxHeap);
+    }
+
+    private void remove(PriorityQueue<Integer> minHeap, PriorityQueue<Integer> maxHeap, Integer ele) {
+        int med = maxHeap.peek();
+        if (ele > med) {
+            minHeap.remove(ele);
+        } else {
+            maxHeap.remove(ele);
+        }
+        balance(minHeap, maxHeap);
+    }
+
+    private void balance(PriorityQueue<Integer> minHeap, PriorityQueue<Integer> maxHeap) {
+        while (maxHeap.size() < minHeap.size()) {
+            maxHeap.offer(minHeap.poll());
+        }
+        while (maxHeap.size() - minHeap.size() > 1) {
+            minHeap.offer(maxHeap.poll());
+        }
+        HashMap map = new HashMap();
+    }
+
+    public void surroundedRegions(char[][] board) {
+        // Write your code here
+        if (board == null || board.length == 0 || board[0].length == 0) {
+            return;
+        }
+        int n = board.length;
+        int m = board[0].length;
+        boolean[][] visited = new boolean[n][m];
+        for (int i = 0; i < m; i++) {
+            if (board[0][i] == 'O') {
+                bfs(board, 0, i, visited);
+            }
+            if (board[n - 1][i] == 'O') {
+                bfs(board, n - 1, i, visited);
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            if (board[i][0] == 'O') {
+                bfs(board, i, 0, visited);
+            }
+            if (board[i][m - 1] == 'O') {
+                bfs(board, i, m - 1, visited);
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (board[i][j] == 'Y') {
+                    board[i][j] = 'O';
+                } else if (board[i][j] == 'O') {
+                    board[i][j] = 'X';
+                }
+            }
+        }
+        String a = "";
+    }
+
+    private void bfs(char[][] board, int x, int y, boolean[][] visited) {
+        int n = board.length;
+        int m = board[0].length;
+        if (visited[x][y]) {
+            return;
+        }
+        LinkedList<String> queue = new LinkedList<>();
+        visited[x][y] = true;
+        board[x][y] = 'Y';
+        queue.offer(x + "," + y);
+        int[][] directions = new int[][]{
+                {0, 1}, {0, -1}, {1, 0}, {-1, 0}
+        };
+        while (!queue.isEmpty()) {
+            String point = queue.poll();
+            int i = Integer.valueOf(point.split(",")[0]);
+            int j = Integer.valueOf(point.split(",")[1]);
+            for (int k = 0; k < 4; k++) {
+                int newX = i + directions[k][0];
+                int newY = j + directions[k][1];
+                if (newX < 0 || newY < 0 || newX >= n || newY >= m || visited[newX][newY]) {
+                    continue;
+                }
+                if (board[newX][newY] == 'O') {
+                    visited[newX][newY] = true;
+                    board[newX][newY] = 'Y';
+                    queue.offer(newX + "," + newY);
+                }
+            }
+        }
+    }
+
+    public ArrayList<Integer> countOfSmallerNumberII(int[] A) {
+        // write your code here
+        if (A == null || A.length == 0) {
+            return new ArrayList<>(0);
+        }
+        int[] biTree = new int[10002];
+        ArrayList<Integer> result = new ArrayList<>(A.length);
+        for (int a : A) {
+            result.add(prefixSum(a, biTree));
+            add(a + 1, 1, biTree);
+        }
+        return result;
+    }
+
+    private void add(int index, int val, int[] biTree) {
+        while (index < biTree.length) {
+            biTree[index] += val;
+            index += lowBit(index);
+        }
+    }
+
+    private int prefixSum(int index, int[] biTree) {
+        int sum = 0;
+        while (index > 0) {
+            sum += biTree[index];
+            index -= lowBit(index);
+        }
+        return sum;
+    }
+
+    private int lowBit(int c) {
+        return c & -c;
+    }
+
+    public int maximalRectangle(boolean[][] matrix) {
+        // Write your code here
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
+        int n = matrix.length;
+        int m = matrix[0].length;
+        int max = 0;
+        int[] heights = new int[m];
+        for (int i = 0; i < m; i++) {
+            if (matrix[0][i]) {
+                heights[i]++;
+            }
+        }
+        max = Math.max(max, findMax(heights));
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (matrix[i][j]) {
+                    if (heights[j] != 0) {
+                        heights[j]++;
+                    }
+                } else {
+                    heights[j] = 0;
+                }
+            }
+            max = Math.max(max, findMax(heights));
+        }
+        return max;
+    }
+
+    private int findMax(int[] heights) {
+        int m = heights.length;
+        int max = 0;
+        LinkedList<Integer> stack = new LinkedList<>();
+        for (int i = 0; i <= m; i++) {
+            int height = i == m ? -1 : heights[i];
+            while (!stack.isEmpty() && height <= heights[stack.peek()]) {
+                int h = heights[stack.pop()];
+                int w = stack.isEmpty() ? i : i - stack.peek() - 1;
+                max = Math.max(max, h * w);
+            }
+            stack.push(i);
+        }
+        return max;
+    }
+
+    public int maxArea(int[] heights) {
+        // write your code here
+        if (heights == null || heights.length <= 1) {
+            return 0;
+        }
+        int max = 0;
+        int left = 0;
+        int right = heights.length - 1;
+        int ll = left;
+        int rr = right;
+        while (left <= right) {
+            if (heights[ll] < heights[rr]) {
+                left++;
+                if (left < heights.length && heights[left] > heights[ll]) {
+                    max = Math.max(max, (left - ll) * heights[ll]);
+                    ll = left;
+                }
+            } else {
+                right--;
+                if (right > 0 && heights[right] > heights[rr]) {
+                    max = Math.max(max, (rr - right) * heights[rr]);
+                    rr = right;
+                }
+            }
+        }
+        if (ll == 0 && rr == heights.length - 1) {
+            max = Math.max(max, Math.min(heights[ll], heights[rr]) * (heights.length - 1));
+        }
+        return max;
+    }
+
+    public boolean firstWillWin(int[] values) {
+        // write your code here
+        if (values == null || values.length <= 2) {
+            return true;
+        }
+        int n = values.length;
+        int[] dp = new int[n];
+        dp[n - 1] = values[n - 1];
+        dp[n - 2] = values[n - 1] + values[n - 2];
+        int total = values[n - 1] + values[n - 2];
+        for (int i = n - 3; i >= 0; i--) {
+            total += values[i];
+            int value1 = values[i] + Math.min(dp[i + 2], i + 3 < n ? dp[i + 3] : 0);
+            int value2 = values[i] + values[i + 1] +
+                    Math.min(i + 3 < n ? dp[i + 3] : 0, i + 4 < n ? dp[i + 4] : 0);
+            dp[i] = Math.max(value1, value2);
+        }
+
+        return dp[0] > (total - dp[0]);
+    }
+
+    public int longestIncreasingContinuousSubsequenceII(int[][] A) {
+        // Write your code here
+        if (A == null || A.length == 0 || A[0].length == 0) {
+            return 0;
+        }
+        int n = A.length;
+        int m = A[0].length;
+        int[][] dp = new int[n][m];
+        boolean[][] mark = new boolean[n][m];
+        int max = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                max = Math.max(max, dfs(A, i, j, mark, dp));
+            }
+        }
+        return max;
+    }
+
+    private int dfs(int[][] A, int x, int y, boolean[][] mark, int[][] dp) {
+        if (mark[x][y]) {
+            return dp[x][y];
+        }
+        int[][] directions = new int[][]{
+                {0, 1}, {0, -1}, {1, 0}, {-1, 0}
+        };
+        int n = A.length;
+        int m = A[0].length;
+        dp[x][y]++;
+        mark[x][y] = true;
+        for (int i = 0; i < 4; i++) {
+            int newX = x + directions[i][0];
+            int newY = y + directions[i][1];
+            if (newX < 0 || newY < 0 || newX >= n || newY >= m || A[newX][newY] <= A[x][y]) {
+                continue;
+            }
+            dfs(A, newX, newY, mark, dp);
+        }
+        return dp[x][y];
+    }
+
+    public int updateBits(int n, int m, int i, int j) {
+        // write your code here
+        int lowMask = 1;
+        if (i == 0) {
+            lowMask = 0;
+        } else {
+            for (int k = 1; k < i; k++) {
+                lowMask <<= 1;
+                lowMask++;
+            }
+        }
+        int low = n & lowMask;
+        int high = (n >>> j) << j;
+        int mid = m << i;
+        return low + mid + high;
+    }
+
+    public String binaryRepresentation(String n) {
+        // write your code here
+        double x = Double.parseDouble(n);
+        if (x > Integer.MAX_VALUE || x < Integer.MIN_VALUE) {
+            return "ERROR";
+        }
+        if (x == 0) {
+            return "0";
+        }
+        int left = Integer.parseInt(n.split("\\.")[0]);
+        double right = Double.parseDouble("0." + n.split("\\.")[1]);
+        StringBuilder sb = new StringBuilder();
+        while (left > 0) {
+            sb.insert(0, left % 2);
+            left /= 2;
+        }
+        if (right == 0) {
+            return sb.toString();
+        }
+        if (sb.length() == 0) {
+            sb.append(0);
+        }
+        sb.append(".");
+        int count = 1;
+        while (count <= 32) {
+            double temp = Math.pow(2, -count);
+            if (right >= temp) {
+                right -= temp;
+                sb.append(1);
+            } else {
+                sb.append(0);
+            }
+            if (right == 0) {
+                return sb.toString();
+            }
+            count++;
+        }
+        return "ERROR";
+    }
+
+    public String largestNumber(int[] num) {
+        if (num == null || num.length == 0) {
+            return "0";
+        }
+        int n = num.length;
+        List<String> list = new ArrayList<>(n);
+        for (int i : num) {
+            list.add(i + "");
+        }
+        Collections.sort(list, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                String a = o1 + o2;
+                String b = o2 + o1;
+                return a.compareTo(b);
+            }
+        });
+        StringBuilder res = new StringBuilder();
+        for (String str : list) {
+            res.append(str);
+        }
+        return res.toString();
+    }
+
+    public String DeleteDigits(String A, int k) {
+        // write your code here
+        StringBuffer sb = new StringBuffer(A);
+        for (int i = 0; i < k; i++) {
+            for (int j = 0; j < sb.length() - 1; j++) {
+                if (sb.charAt(j) > sb.charAt(j + 1)) {
+                    sb.delete(j, j + 1);
+                    break;
+                }
+                if (j == sb.length() - 2) {
+                    sb.delete(j + 1, j + 2);
+                }
+            }
+        }
+        while (sb.length() > 1 && sb.charAt(0) == '0') {
+            sb.delete(0, 1);
+        }
+        return sb.toString();
+    }
+
+    public int majorityNumber(int[] nums) {
+        // write your code
+        int a = 0;
+        int countA = 0;
+        int b = 0;
+        int countB = 0;
+        for (int num : nums) {
+            if (countA == 0) {
+                a = num;
+                countA = 1;
+            } else if (countB == 0) {
+                b = num;
+                countB = 1;
+            } else if (num == a) {
+                countA++;
+            } else if (num == b) {
+                countB++;
+            } else {
+                countA--;
+                countB--;
+            }
+        }
+        countA = 0;
+        countB = 0;
+        for (int num : nums) {
+            if (num == a) {
+                countA++;
+            } else if (num == b) {
+                countB++;
+            }
+        }
+
+        return countA > countB ? a : b;
+    }
+
+    public int majorityNumber(ArrayList<Integer> nums, int k) {
+        // write your code
+        Map<Integer, Integer> map = new HashMap<>(k);
+        for (int num : nums) {
+            if (map.containsKey(num)) {
+                map.put(num, map.get(num) + 1);
+            } else {
+                map.put(num, 1);
+                if (map.size() >= k) {
+                    removeZeroCount(map);
+                }
+            }
+        }
+        for (int key : map.keySet()) {
+            map.put(key, 0);
+        }
+        for (int num : nums) {
+            if (map.containsKey(num)) {
+                map.put(num, map.get(num) + 1);
+            }
+        }
+        int max = 0;
+        int count = 0;
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            if (entry.getValue() > count) {
+                max = entry.getKey();
+                count = entry.getValue();
+            }
+        }
+        return max;
+    }
+
+    private void removeZeroCount(Map<Integer, Integer> map) {
+        for (int key : map.keySet()) {
+            map.put(key, map.get(key) - 1);
+        }
+        Iterator<Map.Entry<Integer, Integer>> it = map.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry<Integer, Integer> entry = it.next();
+            if (entry.getValue() == 0) {
+                it.remove();
+            }
+        }
+    }
+
+    public int copyBooks(int[] pages, int k) {
+        // write your code here
+        int n = pages.length;
+        int[] sum = new int[n];
+        sum[0] = pages[0];
+        for (int i = 1; i < n; i++) {
+            sum[i] = sum[i - 1] + pages[i];
+        }
+        int[][] dp = new int[n][k + 1];
+        for (int i = 0; i < n; i++) {
+            dp[i][1] = sum[i];
+            for (int j = 2; j <= k; j++) {
+                dp[i][j] = Integer.MAX_VALUE;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 2; j <= k; j++) {
+                dp[i][j] = Math.min(dp[i][j], Math.max(dp[i][j - 1], sum[n - 1] - sum[i]));
+            }
+        }
+        return dp[n - 1][k];
+    }
+
+    public static void main(String[] args) {
+        int test = new Test().copyBooks(new int[]{3, 2, 4}, 2);
     }
 }
+
