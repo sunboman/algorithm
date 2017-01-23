@@ -1,9 +1,6 @@
 package leetcode.dfs;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by sunbo_000 on 10/17/2016.
@@ -27,31 +24,46 @@ import java.util.Set;
 public class Permutations_II_47 {
 
     public List<List<Integer>> permuteUnique(int[] nums) {
+        // Write your code here
         List<List<Integer>> result = new ArrayList<>();
-        result.add(new ArrayList<>());
-        for (int i = 0; i < nums.length; i++) {
-            Set<ArrayList<Integer>> current = new HashSet<>();
-            for (List<Integer> permution : result) {
-                for (int j = 0; j < permution.size() + 1; j++) {
-                    permution.add(j, nums[i]);
-                    ArrayList<Integer> list = new ArrayList<>(permution);
-                    permution.remove(j);
-                    current.add(list);
-                }
-            }
-            result = new ArrayList<>(current);
+        if (nums == null) {
+            return result;
         }
 
+        if (nums.length == 0) {
+            result.add(new ArrayList<Integer>());
+            return result;
+        }
+        Arrays.sort(nums);
+        boolean[] visited = new boolean[nums.length];
+        dfs(nums, new ArrayList<Integer>(), result, visited);
         return result;
     }
 
+    private void dfs(int[] nums, List<Integer> temp, List<List<Integer>> result, boolean[] visited) {
+        if (temp.size() == nums.length) {
+            result.add(new ArrayList<Integer>(temp));
+            return;
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            if (visited[i] || (i != 0 && nums[i] == nums[i - 1] && visited[i - 1])) {
+                continue;
+            }
+            temp.add(nums[i]);
+            visited[i] = true;
+            dfs(nums, temp, result, visited);
+            temp.remove(temp.size() - 1);
+            visited[i] = false;
+        }
+
+    }
 
 
     public static void main(String[] args) {
-        int[] nums = {1, 1, 3};
+        int[] nums = {1, 1, 1};
         Permutations_II_47 solution = new Permutations_II_47();
         List<List<Integer>> result = solution.permuteUnique(nums);
-        String a = "";
     }
 
 
