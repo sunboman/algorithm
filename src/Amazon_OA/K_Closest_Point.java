@@ -38,6 +38,6 @@ public class K_Closest_Point {
     private double getDistance(Point a, Point origin) {
         double x = a.x - origin.x;
         double y = a.y - origin.y;
-        return Math.sqrt(x * x - y * y);
+        return Math.sqrt(x * x + y * y);
     }
 }

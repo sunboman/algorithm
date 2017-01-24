@@ -2,6 +2,18 @@ package Amazon_OA;//给好的connection class，两个城市名，和一个cost�
 
 import java.util.*;
 
+/**
+ *   给十几个城市供电，连接不同城市的花费不同，让花费最小同时连到所有的边。给出一系列connection类，里面是edge两端的城市名和它们之间的一个cost，找出要你挑一些边，把所有城市连接起来并且总花费最小。不能有环，最后所以城市要连成一个连通块。
+     不能的话输出空表，最后还要按城市名字排序输出，按照node1来排序,如果一样的话再排node2。
+     输入:
+     {"Acity","Bcity",1}
+     ("Acity","Ccity",2}
+     ("Bcity","Ccity",3}
+     输出：
+     ("Acity","Bcity",1}
+     ("Acity","Ccity",2}
+ */
+
 class Connection {
     String node1;
     String node2;
