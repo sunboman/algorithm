@@ -1,7 +1,5 @@
 package lintcode.binary_tree;
 
-import java.util.Arrays;
-
 /**
  * Created by bosun on 10/27/16.
  */
