@@ -1411,7 +1411,7 @@ public class Test {
         return first;
     }
 
-    public int[] findOrder(int numCourses, int[][] prerequisites) {
+    public int[] findOrderII(int numCourses, int[][] prerequisites) {
         if (prerequisites == null) {
             throw new IllegalArgumentException("illegal prerequisites array");
         }
@@ -4125,6 +4125,7 @@ public class Test {
             this.word = word;
         }
     }
+
     public String shortestPalindrome(String s) {
         if (s == null) {
             return null;
@@ -4140,12 +4141,13 @@ public class Test {
         computeLps(lps, sb);
         return new StringBuilder(s.substring(lps[n - 1])).reverse().toString() + s;
     }
+
     private void computeLps(int[] lps, StringBuilder s) {
         int index = 0;
         for (int i = 1; i < s.length(); i++) {
             if (s.charAt(index) == s.charAt(i)) {
                 index++;
-                lps[i] = lps[ i -1] + 1;
+                lps[i] = lps[i - 1] + 1;
             } else {
                 index = lps[i - 1];
                 while (index > 0 && s.charAt(index) != s.charAt(i)) {
@@ -4158,8 +4160,65 @@ public class Test {
             }
         }
     }
+
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        if (prerequisites == null || prerequisites.length == 0) {
+            int[] res = new int[numCourses];
+            for (int i = 0; i < numCourses; i++) {
+                res[i] = i;
+            }
+            return res;
+        }
+        List<Set<Integer>> adj = new ArrayList<>();
+        for (int i = 0; i < numCourses; i++) {
+            adj.add(new HashSet<Integer>());
+        }
+        for (int i = 0; i < prerequisites.length; i++) {
+            adj.get(prerequisites[i][1]).add(prerequisites[i][0]);
+        }
+        boolean[] marked = new boolean[numCourses];
+        LinkedList<Integer> stack = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (!dfs(stack, new boolean[numCourses], marked, adj, i)) {
+                return new int[0];
+            }
+        }
+        int i = 0;
+        int[] result = new int[numCourses];
+        while (!stack.isEmpty()) {
+            result[i++] = stack.pop();
+        }
+        return result;
+    }
+
+    private boolean dfs(LinkedList<Integer> stack, boolean[] onStack, boolean[] marked, List<Set<Integer>> adj, int v) {
+        if (onStack[v]) {
+            return false;
+        }
+        if (marked[v]) {
+            return true;
+        }
+        onStack[v] = true;
+        marked[v] = true;
+        for (int w : adj.get(v)) {
+            if (onStack[w]) {
+                return false;
+            }
+            if (!marked[w]) {
+                if (!dfs(stack, onStack, marked, adj, w)) {
+                    return false;
+                }
+            }
+        }
+        stack.push(v);
+        onStack[v] = false;
+        return true;
+    }
+
     public static void main(String[] args) {
-        String s = new Test().shortestPalindrome("aacecaaa");
+        new Test().findOrder(2, new int[][]{
+                {0, 1}, {1, 0}
+        });
     }
 }
 
