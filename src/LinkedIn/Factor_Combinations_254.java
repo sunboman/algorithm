@@ -17,7 +17,7 @@ Note:
 You may assume that n is always positive.
 Factors should be greater than 1 and less than n.
  */
-public class Factor_Combinations {
+public class Factor_Combinations_254 {
     public List<List<Integer>> getFactors(int n) {
         if (n == 1) {
             return new ArrayList<>(0);
@@ -48,6 +48,6 @@ public class Factor_Combinations {
     }
 
     public static void main(String[] args) {
-        List<List<Integer>> res = new Factor_Combinations().getFactors(16);
+        List<List<Integer>> res = new Factor_Combinations_254().getFactors(16);
     }
 }

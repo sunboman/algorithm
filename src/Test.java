@@ -4125,7 +4125,6 @@ public class Test {
             this.word = word;
         }
     }
-
     public String shortestPalindrome(String s) {
         if (s == null) {
             return null;
@@ -4141,13 +4140,12 @@ public class Test {
         computeLps(lps, sb);
         return new StringBuilder(s.substring(lps[n - 1])).reverse().toString() + s;
     }
-
     private void computeLps(int[] lps, StringBuilder s) {
         int index = 0;
         for (int i = 1; i < s.length(); i++) {
             if (s.charAt(index) == s.charAt(i)) {
                 index++;
-                lps[i] = lps[i - 1] + 1;
+                lps[i] = lps[ i -1] + 1;
             } else {
                 index = lps[i - 1];
                 while (index > 0 && s.charAt(index) != s.charAt(i)) {
@@ -4213,6 +4211,342 @@ public class Test {
         stack.push(v);
         onStack[v] = false;
         return true;
+    }
+
+
+    public List<List<Integer>> combinationSum3(int[] candidates, int target) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (candidates == null || candidates.length == 0) return result;
+        Arrays.sort(candidates);
+        HashSet<ArrayList<Integer>> tempResult = new HashSet<>();
+        dfs(candidates, 0, target, new ArrayList<>(), tempResult);
+        result = new ArrayList<>(tempResult);
+        return result;
+    }
+
+    private void dfs(int[] candidates, int pointer, int target, List<Integer> temp, HashSet<ArrayList<Integer>> result) {
+        if (target == 0) {
+            result.add(new ArrayList<>(temp));
+            return;
+        }
+
+        for (int i = pointer; i < candidates.length; i++) {
+            if (target < candidates[i] && (pointer > 0 && candidates[pointer] > candidates[pointer - 1])) return;
+            temp.add(candidates[i]);
+            dfs(candidates, i + 1, target - candidates[i], temp, result);
+            temp.remove(temp.size() - 1);
+        }
+    }
+
+    public int maximalRectangle(char[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
+        int n = matrix.length;
+        int m = matrix[0].length;
+        int[] heights = new int[m];
+        int max = 0;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (matrix[i][j] == '0') {
+                    heights[j] = 0;
+                } else {
+                    heights[j]++;
+                }
+            }
+            max = Math.max(max, getMaxRect(heights));
+        }
+        return max;
+    }
+
+    private int getMaxRect(int[] heights) {
+        LinkedList<Integer> stack = new LinkedList<>();
+        int n = heights.length;
+        int max = 0;
+        for (int i = 0; i <= n; i++) {
+            int height = 0;
+            if (i == n) {
+                height = -1;
+            } else {
+                height = heights[i];
+            }
+            while (!stack.isEmpty() && height <= heights[stack.peek()]) {
+                int h = heights[stack.pop()];
+                int w = 0;
+                if (stack.isEmpty()) {
+                    w = i;
+                } else {
+                    w = i - stack.peek() - 1;
+                }
+                max = Math.max(max, w * h);
+            }
+            stack.push(i);
+        }
+        return max;
+    }
+
+    public String intToRoman(int num) {
+        Map<Integer, Character> map = new HashMap<>();
+        map.put(1, 'I');
+        map.put(5, 'V');
+        map.put(10, 'X');
+        map.put(50, 'L');
+        map.put(100, 'C');
+        map.put(500, 'D');
+        map.put(1000, 'M');
+        StringBuilder res = new StringBuilder();
+        int dim = 1;
+        while (num > 0) {
+            int temp = num % 10 * dim;
+            if (temp == 5 * dim) {
+                res.insert(0, map.get(5 * dim));
+            } else if (temp == 4 * dim) {
+                res.insert(0, map.get(dim));
+                res.insert(1, map.get(5 * dim));
+            } else if (temp == 9 * dim) {
+                res.insert(0, map.get(dim));
+                res.insert(0, map.get(10 * dim));
+            } else if (temp < 4 * dim) {
+                for (int i = 1; i <= temp / dim; i++) {
+                    res.insert(0, map.get(dim));
+                }
+            } else {
+                res.insert(0, map.get(5 * dim));
+                for (int i = 1; i <= (temp / dim) - 5; i++) {
+                    res.insert(1, map.get(dim));
+                }
+            }
+            dim *= 10;
+            num /= 10;
+        }
+        return res.toString();
+    }
+
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        if (prerequisites == null || prerequisites.length == 0) {
+            return true;
+        }
+        List<Set<Integer>> list = new ArrayList<>(numCourses);
+        int[] inDegree = new int[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            list.add(new HashSet<>());
+        }
+        int n = prerequisites.length;
+        for (int i = 0; i < n; i++) {
+            list.get(prerequisites[i][1]).add(prerequisites[i][0]);
+            inDegree[prerequisites[i][0]]++;
+        }
+        LinkedList<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (inDegree[i] == 0) {
+                queue.offer(i);
+            }
+        }
+        int count = 0;
+        while (!queue.isEmpty()) {
+            int course = queue.poll();
+            count++;
+            for (int next : list.get(course)) {
+                inDegree[next]--;
+                if (inDegree[next] == 0) {
+                    queue.offer(next);
+                }
+            }
+        }
+        return count == numCourses;
+    }
+
+    public List<Integer> findMinHeightTrees(int n, int[][] edges) {
+        if (edges == null || edges.length == 0) {
+            return new ArrayList<>(0);
+        }
+        List<Set<Integer>> list = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            list.add(new HashSet<>());
+        }
+        int m = edges.length;
+        for (int i = 0; i < m; i++) {
+            list.get(edges[i][0]).add(edges[i][1]);
+            list.get(edges[i][1]).add(edges[i][0]);
+        }
+        List<Integer> leaves = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            if (list.get(i).size() == 1) {
+                leaves.add(i);
+            }
+        }
+        while (n > 2) {
+            n -= leaves.size();
+            List<Integer> newLeaves = new ArrayList<>();
+            for (int leaf : leaves) {
+                int connect = list.get(leaf).iterator().next();
+                list.get(connect).remove(leaf);
+                if (list.get(connect).size() == 1) {
+                    newLeaves.add(connect);
+                }
+            }
+            leaves = newLeaves;
+        }
+        return leaves;
+    }
+
+    public int maxPoints(Point[] points) {
+        if (points == null || points.length == 0) {
+            return 0;
+        }
+        int max = 0;
+        int n = points.length;
+        for (int i = 0; i < n; i++) {
+            Map<Double, Integer> slopeCount = new HashMap<>();
+            slopeCount.put(Double.MIN_VALUE, 1);
+            int dup = 0;
+            Point origin = points[i];
+            for (int j = i + 1; j < n; j++) {
+                Point point = points[j];
+                if (point.x == origin.x && point.y == origin.y) {
+                    dup++;
+                    continue;
+                }
+                double slope = point.x == origin.x ? Double.MAX_VALUE :
+                        0.0 + ((double) point.y - (double) origin.y) / ((double) point.x - (double) origin.x);
+                if (!slopeCount.containsKey(slope)) {
+                    slopeCount.put(slope, 2);
+                } else {
+                    slopeCount.put(slope, slopeCount.get(slope) + 1);
+                }
+            }
+            for (int count : slopeCount.values()) {
+                max = Math.max(max, count + dup);
+            }
+        }
+        return max;
+    }
+
+    public void setZeroes(int[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return;
+        }
+        int n = matrix.length;
+        int m = matrix[0].length;
+        boolean firstCol = false;
+        boolean firstRow = false;
+        for (int j = 0; j < m; j++) {
+            if (matrix[0][j] == 0) {
+                firstRow = true;
+                break;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            if (matrix[i][0] == 0) {
+                firstCol = true;
+                break;
+            }
+        }
+        for (int i = 1; i < n; i++) {
+            for (int j = 1; j < m; j++) {
+                if (matrix[i][j] == 0) {
+                    matrix[0][j] = matrix[i][0] = 0;
+                }
+            }
+        }
+        for (int i = n - 1; i > 0; i--) {
+            if (matrix[i][0] == 0) {
+                for (int j = 0; j < m; j++) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        for (int j = m - 1; j > 0; j--) {
+            if (matrix[0][j] == 0) {
+                for (int i = 0; i < n; i++) {
+                    matrix[i][j] = 0;
+                }
+            }
+        }
+        if (firstCol) {
+            for (int i = 0; i < n; i++) {
+                matrix[i][0] = 0;
+            }
+        }
+        if (firstRow) {
+            for (int j = 0; j < m; j++) {
+                matrix[0][j] = 0;
+            }
+        }
+    }
+
+    public int findTargetSumWays(int[] nums, int S) {
+        if (nums == null || nums.length == 0) {
+            return S == 0 ? 1 : 0;
+        }
+        int sum = 0;
+        for (int num : nums) {
+            sum += num;
+        }
+        if (S < -sum || S > sum) {
+            return 0;
+        }
+        int[] dp = new int[2 * sum + 1];
+        dp[sum] = 1;
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < 2 * sum + 1; j++) {
+                if (dp[j] != 0) {
+                    dp[j + nums[i]] += dp[j];
+                    dp[j - nums[i]] += dp[j];
+                }
+            }
+        }
+        return dp[S + sum];
+    }
+
+    public int islandPerimeter(int[][] grid, int i, int j) {
+        int[] res = new int[]{0};
+        int[][] d = new int[][]{{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        dfs(grid, i, j, d, res);
+        return res[0];
+    }
+
+    private void dfs(int[][] grid, int i, int j, int[][] d, int[] res) {
+        int n = grid.length;
+        int m = grid[0].length;
+        grid[i][j] = 2;
+        for (int x = 0; x < d.length; x++) {
+            int newX = i + d[x][0];
+            int newY = j + d[x][1];
+            if (newX < 0 || newX >= n || newY < 0 || newY >= m || grid[newX][newY] == 0) {
+                res[0]++;
+            } else if (grid[newX][newY] == 1) {
+                dfs(grid, newX, newY, d, res);
+            }
+        }
+    }
+
+    public List<List<Integer>> printDiagonal(int[][] data) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (data == null || data.length == 0) {
+            return res;
+        }
+        int n = data.length;
+        int m = data[0].length;
+        int x = n - 1;
+        int y = 0;
+        for (int i = 1; i < m + n; i++) {
+            List<Integer> temp = new ArrayList<>();
+            int curr_x = x;
+            int curr_y = y;
+            while (curr_x >= 0 && curr_x < n && curr_y >= 0 && curr_y < m) {
+                temp.add(data[curr_x][curr_y]);
+                curr_x++;
+                curr_y++;
+            }
+            res.add(new ArrayList<>(temp));
+            if (x > 0) {
+                x--;
+            } else {
+                y++;
+            }
+        }
+        return res;
     }
 
     public static void main(String[] args) {

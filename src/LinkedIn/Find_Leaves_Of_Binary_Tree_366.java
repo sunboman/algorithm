@@ -1,8 +1,7 @@
 package LinkedIn;
 
-import sun.reflect.generics.tree.Tree;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by sunbo on 12/30/2016.
