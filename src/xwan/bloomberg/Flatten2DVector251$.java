@@ -78,4 +78,8 @@ public class Flatten2DVector251$ {
             return ite != null && ite.hasNext();
         }
     }
+
+    public static void main(String[] args) {
+
+    }
 }

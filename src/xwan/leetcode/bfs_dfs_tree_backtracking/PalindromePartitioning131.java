@@ -1,7 +1,12 @@
 package xwan.leetcode.bfs_dfs_tree_backtracking;
 
+import org.omg.PortableInterceptor.INACTIVE;
+
+import java.net.Inet4Address;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by xwan on 12/30/16.
@@ -47,5 +52,9 @@ public class PalindromePartitioning131 {
 
     public static void main(String[] args) {
         partition("aab");
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int key : map.keySet()) {
+
+        }
     }
 }
