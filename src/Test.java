@@ -4548,11 +4548,8 @@ public class Test {
         }
         return res;
     }
-
     public static void main(String[] args) {
-        new Test().findOrder(2, new int[][]{
-                {0, 1}, {1, 0}
-        });
+
     }
 }
 
