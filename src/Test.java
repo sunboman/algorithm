@@ -4572,7 +4572,14 @@ public class Test {
 
     public static void main(String[] args) {
         new Test().mergeII(Arrays.asList(new Interval(1, 2), new Interval(2, 3)));
-
+        int[][] test = new int[][] {{2,1},{3,1}};
+        Arrays.sort(test, (a, b) -> {
+            if(a[0] == b[0]) {
+                return a[1] - b[1];
+            } else {
+                return a[0] - b[0];
+            }
+        });
     }
 }
 
