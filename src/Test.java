@@ -4125,6 +4125,7 @@ public class Test {
             this.word = word;
         }
     }
+
     public String shortestPalindrome(String s) {
         if (s == null) {
             return null;
@@ -4140,12 +4141,13 @@ public class Test {
         computeLps(lps, sb);
         return new StringBuilder(s.substring(lps[n - 1])).reverse().toString() + s;
     }
+
     private void computeLps(int[] lps, StringBuilder s) {
         int index = 0;
         for (int i = 1; i < s.length(); i++) {
             if (s.charAt(index) == s.charAt(i)) {
                 index++;
-                lps[i] = lps[ i -1] + 1;
+                lps[i] = lps[i - 1] + 1;
             } else {
                 index = lps[i - 1];
                 while (index > 0 && s.charAt(index) != s.charAt(i)) {
@@ -4548,7 +4550,28 @@ public class Test {
         }
         return res;
     }
+
+    public List<Interval> mergeII(List<Interval> intervals) {
+        if (intervals == null || intervals.size() <= 1) {
+            return intervals;
+        }
+        Collections.sort(intervals, (a, b) -> a.start - b.start);
+        Interval prev = intervals.get(0);
+        List<Interval> result = new ArrayList<>();
+        for (int i = 1; i < intervals.size(); i++) {
+            if (prev.end < intervals.get(i).start) {
+                result.add(prev);
+                prev = intervals.get(i);
+            } else {
+                prev.end = Math.max(prev.end, intervals.get(i).end);
+            }
+        }
+        result.add(prev);
+        return result;
+    }
+
     public static void main(String[] args) {
+        new Test().mergeII(Arrays.asList(new Interval(1, 2), new Interval(2, 3)));
 
     }
 }
