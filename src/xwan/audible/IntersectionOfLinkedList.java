@@ -10,4 +10,6 @@ package xwan.audible;
  * follow up: What if lists contain duplicates.?
  */
 public class IntersectionOfLinkedList {
+    public static void main(String[] args) {
+    }
 }
