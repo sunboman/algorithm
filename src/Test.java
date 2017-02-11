@@ -4570,16 +4570,115 @@ public class Test {
         return result;
     }
 
-    public static void main(String[] args) {
-        new Test().mergeII(Arrays.asList(new Interval(1, 2), new Interval(2, 3)));
-        int[][] test = new int[][] {{2,1},{3,1}};
-        Arrays.sort(test, (a, b) -> {
-            if(a[0] == b[0]) {
-                return a[1] - b[1];
+    public String decodeString(String s) {
+        if (s == null || s.length() == 0) {
+            return s;
+        }
+        LinkedList<Integer> stack1 = new LinkedList<>();
+        LinkedList<String> stack2 = new LinkedList<>();
+        int prev = 0;
+        int n = s.length();
+        for (int i = 0; i < n; i++) {
+            if (s.charAt(i) >= '0' && s.charAt(i) <= '9') {
+                prev = prev * 10 + (s.charAt(i) - '0');
+            } else if (s.charAt(i) == '[') {
+                stack1.push(prev);
+                stack2.push("[");
+                prev = 0;
+            } else if (s.charAt(i) == ']') {
+                LinkedList<String> tempStack = new LinkedList<>();
+                while (!stack2.isEmpty()) {
+                    String str = stack2.pop();
+                    if (str.equals("[")) {
+                        StringBuffer temp = new StringBuffer();
+                        StringBuffer rs = new StringBuffer();
+                        int num = stack1.pop();
+                        while (!tempStack.isEmpty()) {
+                            temp.append(tempStack.pop());
+                        }
+                        for (int j = 0; j < num; j++) {
+                            rs.append(temp);
+                        }
+                        stack2.push(rs.toString());
+                        break;
+                    }
+                    tempStack.push(str);
+                }
             } else {
-                return a[0] - b[0];
+                stack2.push(String.valueOf(s.charAt(i)));
             }
-        });
+        }
+        StringBuffer res = new StringBuffer();
+        while (!stack2.isEmpty()) {
+            res.append(stack2.pollLast());
+        }
+        return res.toString();
+    }
+
+    int count = 0;
+    TreeNode node1;
+    TreeNode node2;
+    TreeNode prev = new TreeNode(Integer.MIN_VALUE);
+
+    public void recoverTree(TreeNode root) {
+        findMistakes(root);
+        int temp = node1.val;
+        node1.val = node2.val;
+        node2.val = temp;
+    }
+
+    private void findMistakes(TreeNode root) {
+        if (count >= 2 || root == null) {
+            return;
+        }
+        findMistakes(root.left);
+        if (node1 == null && prev.val >= root.val) {
+            node1 = prev;
+        }
+        if (node1 != null && prev.val >= root.val) {
+            node2 = root;
+        }
+        prev = root;
+        findMistakes(root.right);
+    }
+    public int longestIncreasingPath(int[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return 0;
+        }
+        int n = matrix.length;
+        int m = matrix[0].length;
+        int[][] catched = new int[n][m];
+        int res = 1;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                res = Math.max(res, dfs(matrix, i, j, catched));
+            }
+        }
+        return res;
+    }
+    private int dfs(int[][] matrix, int i, int j, int[][] catched) {
+        if (catched[i][j] != 0) return catched[i][j];
+        int n = matrix.length;
+        int m = matrix[0].length;
+        int[][] dis = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        int len = 1;
+        for (int k = 0; k < 4; k++) {
+            int x = i + dis[k][0];
+            int y = j + dis[k][1];
+            if (x < 0 || x >= n || y < 0 || y >= m || matrix[x][y] <= matrix[i][j]) {
+                continue;
+            }
+            len = Math.max(len, 1 + dfs(matrix, x, y, catched));
+        }
+        catched[i][j] = len;
+        return len;
+    }
+    public static void main(String[] args) {
+        TreeNode one = new TreeNode(1);
+        TreeNode zero = new TreeNode(0);
+        one.left = new TreeNode(2);
+        one.right = zero;
+        new Test().recoverTree(one);
     }
 }
 
