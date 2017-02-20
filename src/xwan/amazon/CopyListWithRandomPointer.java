@@ -4,6 +4,8 @@ package xwan.amazon;
  * Created by xwan on 1/27/17.
  */
 
+import org.omg.PortableInterceptor.INACTIVE;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,5 +43,22 @@ public class CopyListWithRandomPointer {
         }
 
         return map.get(head);
+    }
+
+    public static void main(String[] args) {
+        Map<Integer, Integer> map = new HashMap<>();
+        map.put(1, 1);
+        map.put(2, 2);
+        map.put(3, 1);
+        map.put(4, 1);
+
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            int key = entry.getKey();
+            int value = entry.getValue();
+            if (value <= 1) {
+                map.remove(key);
+            }
+        }
+        System.out.println();
     }
 }
