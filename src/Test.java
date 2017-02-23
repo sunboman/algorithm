@@ -4767,6 +4767,51 @@ public class Test {
     root.left = null;
     flatten_prev = root;
   }
+  public int trapRainWater(int[][] heightMap) {
+    if (heightMap == null || heightMap.length == 0 || heightMap[0].length == 0) {
+      return 0;
+    }
+    PriorityQueue<Cell> heap = new PriorityQueue<>(Comparator.comparingInt(a -> a.h));
+    int n = heightMap.length;
+    int m = heightMap[0].length;
+    boolean[][] visited = new boolean[n][m];
+    for (int i = 0; i < m; i++) {
+      heap.offer(new Cell(0, i, heightMap[0][i]));
+      visited[0][i] = true;
+      heap.offer(new Cell(n - 1, i, heightMap[n - 1][i]));
+      visited[n - 1][i] = true;
+    }
+    for (int i = 1; i < n - 1; i++) {
+      heap.offer(new Cell(i, 0, heightMap[i][0]));
+      visited[i][0] = true;
+      heap.offer(new Cell(i, m - 1, heightMap[i][m - 1]));
+      visited[i][m - 1] = true;
+    }
+    int res = 0;
+    int[][] dir = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    while(!heap.isEmpty()) {
+      Cell curr = heap.poll();
+      for (int i = 0; i < 4; i++) {
+        int x = curr.x + dir[i][0];
+        int y = curr.y + dir[i][1];
+        if (x < 0 || x >= n || y < 0 || y >= m || visited[x][y]) {
+          continue;
+        }
+        heap.offer(new Cell(x, y, heightMap[x][y]));
+        visited[x][y] = true;
+        res += Math.max(0, curr.h - heightMap[x][y]);
+      }
+    }
+    return res;
+  }
+  private class Cell {
+    int x, y, h;
+    public Cell(int x, int y, int h) {
+      this.x = x;
+      this.y = y;
+      this.h = h;
+    }
+  }
   public static void main(String[] args) {
     TreeNode one = new TreeNode(1);
     TreeNode two = new TreeNode(2);
