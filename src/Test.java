@@ -4767,6 +4767,7 @@ public class Test {
     root.left = null;
     flatten_prev = root;
   }
+
   public int trapRainWater(int[][] heightMap) {
     if (heightMap == null || heightMap.length == 0 || heightMap[0].length == 0) {
       return 0;
@@ -4789,7 +4790,7 @@ public class Test {
     }
     int res = 0;
     int[][] dir = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
-    while(!heap.isEmpty()) {
+    while (!heap.isEmpty()) {
       Cell curr = heap.poll();
       for (int i = 0; i < 4; i++) {
         int x = curr.x + dir[i][0];
@@ -4804,27 +4805,54 @@ public class Test {
     }
     return res;
   }
+
   private class Cell {
     int x, y, h;
+
     public Cell(int x, int y, int h) {
       this.x = x;
       this.y = y;
       this.h = h;
     }
   }
+
+  public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
+    if (A == null || A.length == 0) {
+      return 0;
+    }
+    Map<Integer, Integer> map = new HashMap<>();
+    int n = A.length;
+    for (int a : A) {
+      for (int b : B) {
+        int sum = a + b;
+        map.put(sum, map.getOrDefault(sum, 0) + 1);
+      }
+    }
+    int res = 0;
+    for (int c : C) {
+      for (int d : D) {
+        res += map.getOrDefault(-(c + d), 0);
+      }
+    }
+    return res;
+  }
+
+  public List<Integer> findDuplicates(int[] nums) {
+    List<Integer> res = new ArrayList<>();
+    int n = nums.length;
+    for (int num : nums) {
+      nums[(num % (n + 1)) - 1] += (n + 1);
+    }
+    for (int i = 0; i < n; i++) {
+      if (nums[i] / (n + 1) > 1) {
+        res.add(i + 1);
+      }
+    }
+    return res;
+  }
+
   public static void main(String[] args) {
-    TreeNode one = new TreeNode(1);
-    TreeNode two = new TreeNode(2);
-    TreeNode three = new TreeNode(3);
-    TreeNode four = new TreeNode(4);
-    TreeNode five = new TreeNode(5);
-    TreeNode six = new TreeNode(6);
-    one.left = two;
-    one.right = five;
-    two.left = three;
-    two.right = four;
-    five.right = six;
-    new Test().flatten(one);
+    new Test().findDuplicates(new int[]{4, 3, 2, 7, 8, 2, 3, 1});
   }
 }
 
