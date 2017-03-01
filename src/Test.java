@@ -4851,8 +4851,107 @@ public class Test {
     return res;
   }
 
+  public boolean find132pattern(int[] nums) {
+    if (nums == null || nums.length < 3) {
+      return false;
+    }
+    LinkedList<Integer> stack = new LinkedList<>();
+    int n = nums.length;
+    int s3 = Integer.MIN_VALUE;
+    for (int i = n - 1; i >= 0; i--) {
+      if (nums[i] < s3) {
+        return true;
+      } else {
+        while (!stack.isEmpty() && nums[i] > stack.peek()) {
+          s3 = stack.pop();
+        }
+        stack.push(nums[i]);
+      }
+    }
+    return false;
+  }
+
+  public int strongPasswordChecker(String s) {
+    int n = s.length();
+    int res = 0, a = 1, A = 1, d = 1;
+    int[] array = new int[n];
+    for (int i = 0; i < n; ) {
+      if (Character.isLowerCase(s.charAt(i))) {
+        a = 0;
+      } else if (Character.isUpperCase(s.charAt(i))) {
+        A = 0;
+      } else if (Character.isDigit(s.charAt(i))) {
+        d = 0;
+      }
+      int j = i;
+      while (i < n && s.charAt(i) == s.charAt(j)) {
+        i++;
+      }
+      array[j] = i - j;
+    }
+    int missing = (a + A + d);
+    if (n < 6) {
+      res += missing + Math.max(0, 6 - n - missing);
+    } else {
+      int over_len = Math.max(0, n - 20), left = 0;
+      res += over_len;
+      for (int i = 1; i < 3; i++) {
+        for (int j = 0; j < n && over_len > 0; j++) {
+          if (array[j] < 3 || array[j] % 3 != (i - 1)) {
+            continue;
+          }
+          array[j] -= Math.min(over_len, i);
+          over_len -= i;
+        }
+      }
+      for (int i = 0; i < n; i++) {
+        if (array[i] >= 3 && over_len > 0) {
+          int temp = array[i] - 2;
+          array[i] -= over_len;
+          over_len -= temp;
+        }
+        if (array[i] >= 3) {
+          left += array[i] / 3;
+        }
+      }
+      res += Math.max(missing, left);
+    }
+    return res;
+  }
+
+  public int maxProfitIII(int[] prices) {
+    if (prices == null || prices.length == 0) {
+      return 0;
+    }
+    int n = prices.length;
+    int[] left = new int[n];
+    int[] right = new int[n];
+    split(prices, left, right);
+    int res = 0;
+    for (int i = 0; i < n; i++) {
+      res = Math.max(res, left[i] + right[i]);
+    }
+    return res;
+  }
+
+  private void split(int[] prices, int[] left, int[] right) {
+    int n = prices.length;
+    int min = prices[0];
+    left[0] = 0;
+    for (int i = 1; i < n; i++) {
+      left[i] = Math.max(left[i - 1], prices[i] - min);
+      min = Math.min(min, prices[i]);
+    }
+    int max = prices[n - 1];
+    right[n - 1] = 0;
+    for (int i = n - 2; i >= 0; i--) {
+      right[i] = Math.max(right[i + 1], max - prices[i]);
+      max = Math.max(prices[i], max);
+    }
+  }
+
   public static void main(String[] args) {
-    new Test().findDuplicates(new int[]{4, 3, 2, 7, 8, 2, 3, 1});
+    new Test().maxProfitIII(new int[]{1, 2, 4});
   }
 }
 
