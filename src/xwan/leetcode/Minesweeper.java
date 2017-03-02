@@ -75,15 +75,12 @@ public class Minesweeper {
         int y = click[1];
         if (board[x][y] == 'M') {
             board[x][y] = 'X';
-            System.out.println("=================");
             print(board);
             return board;
         }
 
         dfs(board, x, y);
 
-
-        System.out.println("=================");
         print(board);
         return board;
     }
@@ -126,6 +123,7 @@ public class Minesweeper {
             }
             System.out.println();
         }
+        System.out.println("=======================");
     }
 
     public static void main(String[] args) {
