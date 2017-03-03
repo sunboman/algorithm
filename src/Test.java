@@ -1,6 +1,7 @@
 
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by sunbo on 11/2/2016.
@@ -4950,8 +4951,151 @@ public class Test {
     }
   }
 
+  public List<Integer> getRow(int rowIndex) {
+    List<Integer> res = new ArrayList<Integer>();
+    for (int i = 0; i <= rowIndex; i++) {
+      res.add(1);
+      for (int j = i - 1; j > 0; j--) {
+        res.set(j, res.get(j - 1) + res.get(j));
+      }
+    }
+    return res;
+  }
+
+  Map<Integer, Integer> map = new HashMap<>();
+  int max = Integer.MIN_VALUE;
+
+  public int[] findFrequentTreeSum(TreeNode root) {
+    if (root == null) {
+      return new int[0];
+    }
+    dfsII(root);
+    List<Integer> list = map.entrySet().stream()
+            .filter(map -> map.getValue() == max)
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toList());
+    int[] res = new int[list.size()];
+    int index = 0;
+    for (int i : list) {
+      res[index++] = i;
+    }
+    return res;
+  }
+
+  private int dfsII(TreeNode root) {
+    if (root.left == null && root.right == null) {
+      int sum = root.val;
+      if (map.containsKey(sum)) {
+        map.put(sum, map.get(sum) + 1);
+      } else {
+        map.put(sum, 1);
+      }
+      max = Math.max(max, map.get(sum));
+      return sum;
+    }
+    int left = 0;
+    int right = 0;
+    if (root.left != null) {
+      left = dfsII(root.left);
+    }
+    if (root.right != null) {
+      right = dfsII(root.right);
+    }
+    int sum = left + right + root.val;
+    if (map.containsKey(sum)) {
+      map.put(sum, map.get(sum) + 1);
+    } else {
+      map.put(sum, 1);
+    }
+    max = Math.max(max, map.get(sum));
+    return sum;
+  }
+
+  public String[] findWords(String[] words) {
+    if (words == null || words.length == 0) {
+      return new String[0];
+    }
+    Set<Character> set1 = new HashSet<>();
+    for (char c : "qwertyuiop".toCharArray()) {
+      set1.add(c);
+    }
+    Set<Character> set2 = new HashSet<>();
+    for (char c : "asdfghjkl".toCharArray()) {
+      set2.add(c);
+    }
+    Set<Character> set3 = new HashSet<>();
+    for (char c : "zxcvbnm".toCharArray()) {
+      set3.add(c);
+    }
+    List<String> res = new ArrayList<>();
+    for (String word : words) {
+      String temp = word.toLowerCase();
+      char a = temp.charAt(0);
+      Set<Character> set = null;
+      if (set1.contains(a)) {
+        set = set1;
+      } else if (set2.contains(a)) {
+        set = set2;
+      } else {
+        set = set3;
+      }
+      for (int i = 1; i <= temp.length(); i++) {
+        if (i == temp.length()) {
+          res.add(word);
+          break;
+        }
+        if (!set.contains(temp.charAt(i))) {
+          break;
+        }
+      }
+    }
+    return res.toArray(new String[res.size()]);
+  }
+
+  public String frequencySort(String s) {
+    if (s == null || s.length() == 0) {
+      return s;
+    }
+    int n = s.length();
+    Map<Character, Integer> map = new HashMap<>();
+    for (int i = 0; i < n; i++) {
+      char c = s.charAt(i);
+      if (map.containsKey(c)) {
+        map.put(c, map.get(c) + 1);
+      } else {
+        map.put(c, 1);
+      }
+    }
+    Map<Integer, List<Character>> buckets = new HashMap<>();
+    int max = 0;
+    for (Map.Entry<Character, Integer> entry : map.entrySet()) {
+      max = Math.max(entry.getValue(), max);
+      if (!buckets.containsKey(entry.getValue())) {
+        List<Character> list = new ArrayList<>();
+        list.add(entry.getKey());
+        buckets.put(entry.getValue(), list);
+      } else {
+        buckets.get(entry.getValue()).add(entry.getKey());
+      }
+    }
+    StringBuilder res = new StringBuilder();
+    int m = buckets.size();
+    for (int i = 0; i < m; i++) {
+      for (char c : buckets.get(max)) {
+        for (int k = 0; k < max; k++) {
+          res.append(c);
+        }
+      }
+      max--;
+      while (!buckets.containsKey(max) && i < m && max > 0) {
+        max--;
+      }
+    }
+    return res.toString();
+  }
+
   public static void main(String[] args) {
-    new Test().maxProfitIII(new int[]{1, 2, 4});
+    new Test().frequencySort("tree");
   }
 }
 
