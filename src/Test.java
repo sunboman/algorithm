@@ -5094,8 +5094,52 @@ public class Test {
     return res.toString();
   }
 
+  public List<int[]> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+    PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] + a[1] - b[0] - b[1]);
+    int n = nums1.length;
+    int m = nums2.length;
+    List<int[]> res = new ArrayList<>();
+    if (n == 0 || m == 0 || k == 0) {
+      return res;
+    }
+    for (int i = 0; i < n && i < k; i++) {
+      pq.offer(new int[]{nums1[i], nums2[0], 0});
+    }
+    while (k-- > 0 && !pq.isEmpty()) {
+      int[] top = pq.poll();
+      res.add(new int[]{top[0], top[1]});
+      if (top[2] == m - 1) {
+        continue;
+      }
+      pq.offer(new int[]{top[0], nums2[top[2] + 1], top[2] + 1});
+    }
+    return res;
+  }
+
+  public List<Integer> findAnagrams(String s, String p) {
+    List<Integer> res = new ArrayList<>();
+    int[] map = new int[26];
+    for (char c : p.toCharArray()) {
+      map[c - 'a']++;
+    }
+    int left = 0, right = 0, count = p.length();
+    while (right < s.length()) {
+      char c = s.charAt(right++);
+      if (--map[c - 'a'] >= 0) {
+        count--;
+      }
+      if (count == 0) {
+        res.add(left);
+      }
+      if (right - left == p.length() && map[s.charAt(left++) - 'a']++ >= 0) {
+        count++;
+      }
+    }
+    return res;
+  }
+
   public static void main(String[] args) {
-    new Test().frequencySort("tree");
+    new Test().findAnagrams("dbaebabacd", "abc");
   }
 }
 
