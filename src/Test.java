@@ -5138,8 +5138,104 @@ public class Test {
     return res;
   }
 
+  public int findPairs(int[] nums, int k) {
+    if (nums == null || nums.length < 2 || k < 0) {
+      return 0;
+    }
+    if (k == 0) {
+      Map<Integer, Integer> map = new HashMap<>();
+      for (int num : nums) {
+        map.put(num, map.getOrDefault(num, 0) + 1);
+      }
+      return (int) map.values().stream()
+              .filter(a -> a > 1)
+              .count();
+    }
+    Set<Integer> set1 = new HashSet<>();
+    Set<Integer> set2 = new HashSet<>();
+    for (int num : nums) {
+      set1.add(num);
+    }
+    int res = 0;
+    for (int num : set1) {
+      if (set1.contains(num - k) && !set2.contains(num - k)) {
+        res++;
+      }
+      if (set1.contains(num + k) && !set2.contains(num + k)) {
+        res++;
+      }
+      set2.add(num);
+    }
+    return res;
+  }
+
+  public int findLonelyPixel(char[][] picture) {
+    if (picture == null || picture.length == 0 || picture[0].length == 0) {
+      return 0;
+    }
+    int n = picture.length;
+    int m = picture[0].length;
+    int[] row = new int[n];
+    int[] col = new int[m];
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < m; j++) {
+        if (picture[i][j] == 'B') {
+          row[i]++;
+          col[j]++;
+        }
+      }
+    }
+    int res = 0;
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < m; j++) {
+        if (picture[i][j] == 'B') {
+          if (row[i] == 1 && col[j] == 1) {
+            res++;
+          }
+        }
+      }
+    }
+    return res;
+  }
+
+  public int findBlackPixel(char[][] picture, int N) {
+    if (picture == null || picture.length == 0 || picture[0].length == 0) {
+      return 0;
+    }
+    int n = picture.length;
+    int m = picture[0].length;
+    int[] col = new int[m];
+    Map<String, Integer> map = new HashMap<>();
+    for (int i = 0; i < n; i++) {
+      int count = 0;
+      for (int j = 0; j < m; j++) {
+        if (picture[i][j] == 'B') {
+          col[j]++;
+          count++;
+        }
+      }
+      if (count == N) {
+        String str = new String(picture[i]);
+        map.put(str, map.getOrDefault(str, 0) + 1);
+      }
+    }
+    int res = 0;
+    for (Map.Entry<String, Integer> entry : map.entrySet()) {
+      if (entry.getValue() != N) {
+        continue;
+      }
+      String str = entry.getKey();
+      for (int i = 0; i < m; i++) {
+        if (str.charAt(i) == 'B' && col[i] == N) {
+          res += N;
+        }
+      }
+    }
+    return res;
+  }
+
   public static void main(String[] args) {
-    new Test().findAnagrams("dbaebabacd", "abc");
+    new Test().findPairs(new int[]{1, 3, 1, 5, 4}, 0);
   }
 }
 
