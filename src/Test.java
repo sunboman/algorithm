@@ -5142,31 +5142,21 @@ public class Test {
     if (nums == null || nums.length < 2 || k < 0) {
       return 0;
     }
-    if (k == 0) {
-      Map<Integer, Integer> map = new HashMap<>();
-      for (int num : nums) {
-        map.put(num, map.getOrDefault(num, 0) + 1);
-      }
-      return (int) map.values().stream()
-              .filter(a -> a > 1)
-              .count();
-    }
-    Set<Integer> set1 = new HashSet<>();
-    Set<Integer> set2 = new HashSet<>();
+    Map<Integer, Integer> map = new HashMap<>();
     for (int num : nums) {
-      set1.add(num);
+      map.put(num, map.getOrDefault(num, 0) + 1);
     }
-    int res = 0;
-    for (int num : set1) {
-      if (set1.contains(num - k) && !set2.contains(num - k)) {
-        res++;
+    int count = 0;
+    for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+      if (k == 0) {
+        if (entry.getValue() > 1) {
+          count++;
+        }
+      } else if (map.containsKey(entry.getKey() + k)) {
+        count++;
       }
-      if (set1.contains(num + k) && !set2.contains(num + k)) {
-        res++;
-      }
-      set2.add(num);
     }
-    return res;
+    return count;
   }
 
   public int findLonelyPixel(char[][] picture) {
