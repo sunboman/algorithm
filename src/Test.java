@@ -5224,8 +5224,87 @@ public class Test {
     return res;
   }
 
+  public boolean wordPattern(String pattern, String str) {
+    Map<String, Integer> map = new HashMap<>();
+    int n = pattern.length();
+    String[] str_arr = str.split(" ");
+    if (str_arr.length != n) {
+      return false;
+    }
+    for (int i = 0; i < n; i++) {
+      if (!Objects.equals(map.put(pattern.charAt(i) + "0", i), map.put(str_arr[i] + "1", i))) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public String validIPAddress(String IP) {
+    if (IP.contains(".")) {
+      if (checkIPV4(IP)) {
+        return "IPv4";
+      } else {
+        return "Neither";
+      }
+    } else if (IP.contains(":")) {
+      if (checkIPV6(IP)) {
+        return "IPv6";
+      } else {
+        return "Neither";
+      }
+    } else {
+      return "Neither";
+    }
+  }
+
+  private boolean checkIPV4(String IP) {
+    if (IP.lastIndexOf('.') == IP.length() - 1) {
+      return false;
+    }
+    String[] ip_arr = IP.split("\\.");
+    if (ip_arr.length != 4) {
+      return false;
+    }
+    for (String str : ip_arr) {
+      try {
+        if (str.length() > 1 && !(str.charAt(0) >= '1' && str.charAt(0) <= '9')) {
+          return false;
+        }
+        if (Integer.valueOf(str) < 0 || Integer.valueOf(str) > 255) {
+          return false;
+        }
+      } catch (NumberFormatException e) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private boolean checkIPV6(String IP) {
+    if (IP.lastIndexOf(':') == IP.length() - 1) {
+      return false;
+    }
+    String[] ip_arr = IP.split(":");
+    if (ip_arr.length != 8) {
+      return false;
+    }
+    for (String str : ip_arr) {
+      int n = str.length();
+      if (n > 4 || n == 0) {
+        return false;
+      }
+      for (int i = 0; i < n; i++) {
+        char c = str.charAt(i);
+        if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   public static void main(String[] args) {
-    new Test().findPairs(new int[]{1, 3, 1, 5, 4}, 0);
+    new Test().validIPAddress("192.0.0.1");
   }
 }
 
