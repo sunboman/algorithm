@@ -4018,7 +4018,6 @@ public class Test {
     int star = -1;
     int mark = -1;
     while (i < m && j < n) {
-
       if (txt[i] == pat[j]) {
         i++;
         j++;
@@ -5303,8 +5302,74 @@ public class Test {
     return true;
   }
 
+  public String getHint(String secret, String guess) {
+    Map<Character, Integer> map = new HashMap<>();
+    for (char c : secret.toCharArray()) {
+      map.put(c, map.getOrDefault(c, 0) + 1);
+    }
+    int total = 0, bulls = 0, n = secret.length();
+    for (int i = 0; i < n; i++) {
+      char c = guess.charAt(i);
+      if (c == secret.charAt(i)) {
+        bulls++;
+      }
+      if (map.containsKey(c) && map.get(c) > 0) {
+        total++;
+        map.put(c, map.get(c) - 1);
+      }
+    }
+    return bulls + "A" + (total - bulls) + "B";
+  }
+
+  public void solveSudoku(char[][] board) {
+    if (board == null || board.length == 0 || board[0].length == 0) {
+      return;
+    }
+    solve(board);
+  }
+
+  private boolean solve(char[][] board) {
+    int n = board.length, m = board[0].length;
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < m; j++) {
+        if (board[i][j] == '.') {
+          for (char c = '1'; c <= '9'; c++) {
+            if (isValid(board, i, j, c)) {
+              board[i][j] = c;
+              if (solve(board)) {
+                return true;
+              } else {
+                board[i][j] = '.';
+              }
+            }
+          }
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  private boolean isValid(char[][] board, int x, int y, char c) {
+    for (int i = 0; i < 9; i++) {
+      if (board[x][i] != '.' && board[x][i] == c) return false;
+      if (board[i][y] != '.' && board[i][y] == c) return false;
+      if (board[3 * (x / 3) + i / 3][3 * (y / 3) + i % 3] != '.' &&
+              board[3 * (x / 3) + i / 3][3 * (y / 3) + i % 3] == c) return false;
+    }
+    return true;
+  }
+  public boolean detectCapitalUse(String word) {
+    int count = 0;
+    for (char c : word.toCharArray()) {
+      if ('Z' - c >= 0) {
+        count++;
+      }
+    }
+    return count == 0 || count == word.length() || (count == 1 && 'Z' - word.charAt(0) >= 0);
+  }
   public static void main(String[] args) {
-    new Test().validIPAddress("192.0.0.1");
+    System.out.println(Integer.bitCount(7));
   }
 }
 
