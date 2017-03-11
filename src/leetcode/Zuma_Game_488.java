@@ -84,5 +84,6 @@ public class Zuma_Game_488 {
 
   public static void main(String[] args) {
     findMinStep("WWRRBBWW", "WRBRW");
+    String a = "";
   }
 }
