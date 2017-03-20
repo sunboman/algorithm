@@ -8,8 +8,8 @@ import java.util.*;
 public class Test {
     public static void main(String[] args) {
         Map<Integer, Integer> map = new HashMap<>();
-        System.out.println(map.put(1, 4));
-        System.out.println(map.put(2, 6));
+//        System.out.println(map.put(1, 4));
+//        System.out.println(map.put(2, 6));
 
         Set<Integer> set = new HashSet<>();
         PriorityQueue<Integer> pq = new PriorityQueue<>();
@@ -18,7 +18,7 @@ public class Test {
         List<Integer> list = new ArrayList<>();
         new ArrayList<>();
 //        System.out.println('0' - 1);
-//        System.out.println(1<<4);
+        System.out.println("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".length());
 
     }
 }
