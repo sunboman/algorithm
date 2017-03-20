@@ -5224,8 +5224,192 @@ public class Test {
     return res;
   }
 
+  public String reverseStr(String s, int k) {
+    if (s == null || s.length() == 0 || k <= 1) {
+      return s;
+    }
+    int idx = 0;
+    StringBuilder sb = new StringBuilder();
+    while (idx + 2 * k < s.length()) {
+      sb.append(reverse(s.substring(idx, idx + k)));
+      sb.append(s.substring(idx + k, idx + 2 * k));
+      idx += 2 * k;
+    }
+    if (idx < s.length()) {
+      if (idx + k >= s.length()) {
+        sb.append(reverse(s.substring(idx, s.length())));
+      } else {
+        sb.append(reverse(s.substring(idx, idx + k)));
+        sb.append(s.substring(idx + k, s.length()));
+      }
+    }
+    return sb.toString();
+  }
+
+  private String reverse(String str) {
+    StringBuilder sb = new StringBuilder(str);
+    sb.reverse();
+    return sb.toString();
+  }
+
+  public TreeNode deleteNode(TreeNode root, int key) {
+    if (root == null) {
+      return null;
+    }
+    TreeNode node = new TreeNode(Integer.MAX_VALUE);
+    node.left = root;
+    TreeNode parent = node;
+    TreeNode target = root;
+    while (target != null && target.val != key) {
+      parent = target;
+      if (target.val > key) {
+        target = target.left;
+      } else {
+        target = target.right;
+      }
+    }
+    if (target == null) {
+      return root;
+    } else {
+      if (parent.left == target) {
+        if (target.left == null) {
+          parent.left = target.right;
+        } else {
+          parent.left = target.left;
+        }
+      } else {
+        if (target.left == null) {
+          parent.right = target.right;
+        } else {
+          parent.right = target.left;
+        }
+      }
+      if (target.left != null && target.right != null) {
+        TreeNode curr = target.left;
+        while (curr.right != null) {
+          curr = curr.right;
+        }
+        curr.right = target.right;
+      }
+    }
+    return root;
+  }
+
+  public int diameterOfBinaryTree(TreeNode root) {
+    if (root == null || (root.left == null && root.right == null)) {
+      return 0;
+    }
+    return getDiameter(root)[0];
+  }
+
+  private int[] getDiameter(TreeNode root) {
+    if (root == null) {
+      return new int[]{0, -1};
+    }
+    int[] left = getDiameter(root.left);
+    int[] right = getDiameter(root.right);
+    int longest = Math.max(left[1] + right[1] + 2, Math.max(left[0], right[0]));
+    return new int[]{longest, Math.max(left[1], right[1]) + 1};
+  }
+
+  public List<List<Integer>> updateMatrix(List<List<Integer>> matrix) {
+    if (matrix == null || matrix.size() == 0 || matrix.get(0).size() == 0) {
+      return matrix;
+    }
+    List<List<Integer>> res = new ArrayList<>();
+    int n = matrix.size();
+    int m = matrix.get(0).size();
+    LinkedList<int[]> queue = new LinkedList<>();
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < m; j++) {
+        if (matrix.get(i).get(j) == 0) {
+          queue.offer(new int[]{i, j});
+        } else {
+          matrix.get(i).set(j, m + n);
+        }
+      }
+    }
+    int[][] d = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    while (!queue.isEmpty()) {
+      int len = queue.size();
+      for (int i = 0; i < len; i++) {
+        int[] cor = queue.poll();
+        int x = cor[0], y = cor[1];
+        for (int j = 0; j < 4; j++) {
+          int newX = x + d[j][0];
+          int newY = y + d[j][1];
+          if (newX < 0 || newX >= n || newY < 0 || newY >= m
+                  || matrix.get(newX).get(newY) <= matrix.get(x).get(y) + 1) {
+            continue;
+          }
+          queue.offer(new int[]{newX, newY});
+          matrix.get(newX).set(newY, matrix.get(x).get(y) + 1);
+        }
+      }
+    }
+    return matrix;
+  }
+
+  public String findContestMatch(int n) {
+    List<String> list = new ArrayList<>(n);
+    for (int i = 1; i <= n; i++) {
+      list.add(i + "");
+    }
+    while (n > 1) {
+      int lo = 0, hi = n - 1;
+      while (lo < hi) {
+        String temp = "(" + list.get(lo) + "," + list.get(hi) + ")";
+        list.set(lo, temp);
+        lo++;
+        hi--;
+      }
+      n /= 2;
+    }
+    return list.get(0);
+  }
+
+  public int findMinDifference(List<String> timePoints) {
+    if (timePoints == null || timePoints.size() < 2) {
+      return Integer.MAX_VALUE;
+    }
+    Collections.sort(timePoints, (a, b) -> {
+      String[] arr1 = a.split(":");
+      String[] arr2 = b.split(":");
+      for (int i = 0; i < 2; i++) {
+        int i1 = Integer.parseInt(arr1[i]);
+        int i2 = Integer.parseInt(arr2[i]);
+        if (i1 < i2) {
+          return -1;
+        } else if (i1 > i2) {
+          return 1;
+        }
+      }
+      return 0;
+    });
+    int min = Integer.MAX_VALUE;
+    int n = timePoints.size();
+    for (int i = 1; i < n; i++) {
+      min = Math.min(min, getDiff(timePoints.get(i - 1), timePoints.get(i)));
+    }
+    String first = timePoints.get(0);
+    String[] arr = first.split(":");
+    arr[0] = Integer.parseInt(arr[0]) + 24 + "";
+    first = arr[0] + ":" + arr[1];
+    min = Math.min(min, getDiff(timePoints.get(n - 1), first));
+    return min;
+  }
+
+  private int getDiff(String time1, String time2) {
+    int res = 0;
+    String[] arr1 = time1.split(":");
+    String[] arr2 = time2.split(":");
+    res += Integer.parseInt(arr2[1]) - Integer.parseInt(arr1[1]);
+    res += 60 * (Integer.parseInt(arr2[0]) - Integer.parseInt(arr1[0]));
+    return res;
+  }
+
   public static void main(String[] args) {
-    new Test().findPairs(new int[]{1, 3, 1, 5, 4}, 0);
+    String res = new Test().findContestMatch(4);
   }
 }
 
