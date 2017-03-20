@@ -5224,6 +5224,151 @@ public class Test {
     return res;
   }
 
+  public boolean wordPattern(String pattern, String str) {
+    Map<String, Integer> map = new HashMap<>();
+    int n = pattern.length();
+    String[] str_arr = str.split(" ");
+    if (str_arr.length != n) {
+      return false;
+    }
+    for (int i = 0; i < n; i++) {
+      if (!Objects.equals(map.put(pattern.charAt(i) + "0", i), map.put(str_arr[i] + "1", i))) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  public String validIPAddress(String IP) {
+    if (IP.contains(".")) {
+      if (checkIPV4(IP)) {
+        return "IPv4";
+      } else {
+        return "Neither";
+      }
+    } else if (IP.contains(":")) {
+      if (checkIPV6(IP)) {
+        return "IPv6";
+      } else {
+        return "Neither";
+      }
+    } else {
+      return "Neither";
+    }
+  }
+
+  private boolean checkIPV4(String IP) {
+    if (IP.lastIndexOf('.') == IP.length() - 1) {
+      return false;
+    }
+    String[] ip_arr = IP.split("\\.");
+    if (ip_arr.length != 4) {
+      return false;
+    }
+    for (String str : ip_arr) {
+      try {
+        if (str.length() > 1 && !(str.charAt(0) >= '1' && str.charAt(0) <= '9')) {
+          return false;
+        }
+        if (Integer.valueOf(str) < 0 || Integer.valueOf(str) > 255) {
+          return false;
+        }
+      } catch (NumberFormatException e) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private boolean checkIPV6(String IP) {
+    if (IP.lastIndexOf(':') == IP.length() - 1) {
+      return false;
+    }
+    String[] ip_arr = IP.split(":");
+    if (ip_arr.length != 8) {
+      return false;
+    }
+    for (String str : ip_arr) {
+      int n = str.length();
+      if (n > 4 || n == 0) {
+        return false;
+      }
+      for (int i = 0; i < n; i++) {
+        char c = str.charAt(i);
+        if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F'))) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  public String getHint(String secret, String guess) {
+    Map<Character, Integer> map = new HashMap<>();
+    for (char c : secret.toCharArray()) {
+      map.put(c, map.getOrDefault(c, 0) + 1);
+    }
+    int total = 0, bulls = 0, n = secret.length();
+    for (int i = 0; i < n; i++) {
+      char c = guess.charAt(i);
+      if (c == secret.charAt(i)) {
+        bulls++;
+      }
+      if (map.containsKey(c) && map.get(c) > 0) {
+        total++;
+        map.put(c, map.get(c) - 1);
+      }
+    }
+    return bulls + "A" + (total - bulls) + "B";
+  }
+
+  public void solveSudoku(char[][] board) {
+    if (board == null || board.length == 0 || board[0].length == 0) {
+      return;
+    }
+    solve(board);
+  }
+
+  private boolean solve(char[][] board) {
+    int n = board.length, m = board[0].length;
+    for (int i = 0; i < n; i++) {
+      for (int j = 0; j < m; j++) {
+        if (board[i][j] == '.') {
+          for (char c = '1'; c <= '9'; c++) {
+            if (isValid(board, i, j, c)) {
+              board[i][j] = c;
+              if (solve(board)) {
+                return true;
+              } else {
+                board[i][j] = '.';
+              }
+            }
+          }
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  private boolean isValid(char[][] board, int x, int y, char c) {
+    for (int i = 0; i < 9; i++) {
+      if (board[x][i] != '.' && board[x][i] == c) return false;
+      if (board[i][y] != '.' && board[i][y] == c) return false;
+      if (board[3 * (x / 3) + i / 3][3 * (y / 3) + i % 3] != '.' &&
+              board[3 * (x / 3) + i / 3][3 * (y / 3) + i % 3] == c) return false;
+    }
+    return true;
+  }
+  public boolean detectCapitalUse(String word) {
+    int count = 0;
+    for (char c : word.toCharArray()) {
+      if ('Z' - c >= 0) {
+        count++;
+      }
+    }
+    return count == 0 || count == word.length() || (count == 1 && 'Z' - word.charAt(0) >= 0);
+  }
   public String reverseStr(String s, int k) {
     if (s == null || s.length() == 0 || k <= 1) {
       return s;
