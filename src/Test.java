@@ -5360,6 +5360,7 @@ public class Test {
     }
     return true;
   }
+
   public boolean detectCapitalUse(String word) {
     int count = 0;
     for (char c : word.toCharArray()) {
@@ -5369,6 +5370,7 @@ public class Test {
     }
     return count == 0 || count == word.length() || (count == 1 && 'Z' - word.charAt(0) >= 0);
   }
+
   public String reverseStr(String s, int k) {
     if (s == null || s.length() == 0 || k <= 1) {
       return s;
@@ -5553,8 +5555,58 @@ public class Test {
     return res;
   }
 
+  public String findLongestWord(String s, List<String> d) {
+    if (d == null || d.size() == 0 || s == null || s.length() == 0) {
+      return "";
+    }
+    int n = s.length();
+    String res = "";
+    for (String str : d) {
+      int idx = 0;
+      for (char c : s.toCharArray()) {
+        if (idx < str.length() && c == str.charAt(idx)) idx++;
+      }
+      if (idx == str.length() && str.length() >= n) {
+        if (str.length() > n || str.compareTo(res) > 0) {
+          res = str;
+        }
+      }
+    }
+    return res;
+  }
+
+  public boolean isInterleaveII(String s1, String s2, String s3) {
+    if (s1 == null || s1.length() == 0) {
+      if (s2 == null) return s3 == null;
+      else return s2.equals(s3);
+    }
+    if (s2 == null || s2.length() == 0) {
+      if (s1 == null) return s3 == null;
+      else return s1.equals(s3);
+    }
+    int m = s1.length(), n = s2.length();
+    if (m + n != s3.length()) {
+      return false;
+    }
+    boolean[][] dp = new boolean[2][m + 1];
+    dp[0][0] = true;
+    for (int i = 1; i <= m; i++) {
+      if (s3.charAt(i - 1) == s1.charAt(i - 1) && dp[0][i - 1]) {
+        dp[0][i] = true;
+      }
+    }
+    for (int i = 1; i <= n; i++) {
+      dp[i % 2][0] = dp[(i - 1) % 2][0] && (s3.charAt(i - 1) == s2.charAt(i - 1));
+      for (int j = 1; j <= m; j++) {
+        dp[i % 2][j] = s3.charAt(i + j - 1) == s1.charAt(j - 1) && dp[i % 2][j - 1] ||
+                s3.charAt(i + j - 1) == s2.charAt(i - 1) && dp[(i - 1) % 2][j];
+      }
+    }
+    return dp[n % 2][m];
+  }
+
   public static void main(String[] args) {
-    String res = new Test().findContestMatch(4);
+    new Test().isInterleaveII("aabcc", "dbbca", "aadbbcbcac");
   }
 }
 
