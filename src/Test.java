@@ -5605,8 +5605,36 @@ public class Test {
     return dp[n % 2][m];
   }
 
+  public int numDistinct(String s, String t) {
+    if (s == null || t == null) {
+      return 0;
+    }
+    if (s.length() < t.length()) {
+      return 0;
+    }
+    int m = s.length(), n = t.length();
+    int[][] dp = new int[2][m + 1];
+    for (int j = 0; j <= m; j++) {
+      dp[0][j] = 1;
+    }
+    for (int i = 1; i <= n; i++) {
+      for (int j = 1; j <= m; j++) {
+        if (j < i) {
+          dp[i % 2][j] = 0;
+          continue;
+        }
+        if (t.charAt(i - 1) != s.charAt(j - 1)) {
+          dp[i % 2][j] = dp[i % 2][j - 1];
+        } else {
+          dp[i % 2][j] = dp[(i - 1) % 2][j - 1] + dp[i % 2][j - 1];
+        }
+      }
+    }
+    return dp[n % 2][m];
+  }
+
   public static void main(String[] args) {
-    new Test().isInterleaveII("aabcc", "dbbca", "aadbbcbcac");
+    new Test().numDistinct("rabbbit", "rabbit");
   }
 }
 
