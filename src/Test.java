@@ -5634,7 +5634,7 @@ public class Test {
   }
 
   public static void main(String[] args) {
-    new Test().numDistinct("rabbbit", "rabbit");
+//    new Test().wiggleSort(new int[]{1, 5, 1, 1, 6, 4});
   }
 }
 
