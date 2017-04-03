@@ -5633,8 +5633,43 @@ public class Test {
     return dp[n % 2][m];
   }
 
+  public int calculate(String s) {
+    LinkedList<Integer> stack = new LinkedList<>();
+    int n = s.length(), num = 0;
+    char op = '+';
+    for (int i = 0; i < n; i++) {
+      char c = s.charAt(i);
+      if (Character.isDigit(c)) {
+        num = num * 10 + c - '0';
+      }
+      if ((!Character.isDigit(c) && c != ' ' )|| i == n - 1) {
+        switch (op) {
+          case '+':
+            stack.push(num);
+            break;
+          case '-':
+            stack.push(-num);
+            break;
+          case '*':
+            stack.push(stack.pop() * num);
+            break;
+          case '/':
+            stack.push(stack.pop() / num);
+            break;
+        }
+        op = c;
+        num = 0;
+      }
+    }
+    int res = 0;
+    for (int i : stack) {
+      res += i;
+    }
+    return res;
+  }
   public static void main(String[] args) {
 //    new Test().wiggleSort(new int[]{1, 5, 1, 1, 6, 4});
+    new Test().calculate("0/1");
   }
 }
 
