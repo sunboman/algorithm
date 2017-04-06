@@ -5667,6 +5667,29 @@ public class Test {
     }
     return res;
   }
+
+  public int findMinArrowShots(int[][] points) {
+    if (points == null || points.length == 0) {
+      return 0;
+    }
+    Arrays.sort(points,(a, b) -> {
+      if (a[0] != b[0]) {
+        return a[0] - b[0];
+      } else {
+        return a[1] - b[1];
+      }
+    });
+    int res = 1, n = points.length, right = points[0][1];
+    for (int i = 1; i < n; i++) {
+      if (points[i][0] > right) {
+        right = points[i][1];
+        res++;
+      } else {
+        right = Math.min(points[i][1], right);
+      }
+    }
+    return res;
+  }
   public static void main(String[] args) {
 //    new Test().wiggleSort(new int[]{1, 5, 1, 1, 6, 4});
     new Test().calculate("0/1");
