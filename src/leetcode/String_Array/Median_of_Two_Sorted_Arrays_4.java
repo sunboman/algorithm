@@ -51,4 +51,30 @@ public class Median_of_Two_Sorted_Arrays_4 {
             else return findMedian(A, startA, endA, B, midB + 1, endB, k - bLen / 2 - 1);
         }
     }
+    public double findMedianSortedArraysII(int[] nums1, int[] nums2) {
+        int n = nums1.length, m = nums2.length;
+        if ((n + m) % 2 == 1) {
+            return findKth(nums1, 0, nums2, 0, (n + m) / 2 + 1);
+        } else {
+            return (findKth(nums1, 0, nums2, 0, (n + m) / 2) + findKth(nums1, 0, nums2, 0, (n + m) / 2 + 1)) / 2.0;
+        }
+    }
+    private int findKth(int[] a, int a_start, int[] b, int b_start, int k) {
+        if (a_start >= a.length) {
+            return b[b_start + k - 1];
+        }
+        if (b_start >= b.length) {
+            return a[a_start + k - 1];
+        }
+        if (k == 1) {
+            return Math.min(a[a_start], b[b_start]);
+        }
+        int aK = a_start + k / 2 - 1 < a.length ? a[a_start + k / 2 - 1] : Integer.MAX_VALUE;
+        int bK = b_start + k / 2 - 1 < b.length ? b[b_start + k / 2 - 1] : Integer.MAX_VALUE;
+        if (bK < aK) {
+            return findKth(a, a_start, b, b_start + k / 2, k - k / 2);
+        } else {
+            return findKth(a, a_start + k / 2, b, b_start, k - k / 2);
+        }
+    }
 }

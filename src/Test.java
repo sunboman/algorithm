@@ -4018,7 +4018,6 @@ public class Test {
     int star = -1;
     int mark = -1;
     while (i < m && j < n) {
-
       if (txt[i] == pat[j]) {
         i++;
         j++;
@@ -5360,7 +5359,6 @@ public class Test {
     }
     return true;
   }
-
   public boolean detectCapitalUse(String word) {
     int count = 0;
     for (char c : word.toCharArray()) {
@@ -5369,6 +5367,61 @@ public class Test {
       }
     }
     return count == 0 || count == word.length() || (count == 1 && 'Z' - word.charAt(0) >= 0);
+  }
+
+  public int nthUglyNumber(int n) {
+    PriorityQueue<Long> heap = new PriorityQueue<>();
+    Set<Long> set = new HashSet<>();
+    set.add((long) 1);
+    heap.offer((long) 1);
+    int[] primes = new int[]{2, 3, 5};
+    for (int i = 1; i <= n; i++) {
+      Long num = heap.poll();
+      if (i == n) {
+        return num.intValue();
+      }
+      for (int j = 0; j < 3; j++) {
+        if (set.add(primes[j] * num)) {
+          heap.offer(primes[j] * num);
+        }
+      }
+    }
+    return -1;
+  }
+  public String addStrings(String num1, String num2) {
+    if (num1 == null || num1.length() == 0) {
+      return num2;
+    }
+    if (num2 == null || num2.length() == 0) {
+      return num1;
+    }
+    int m = num1.length(), n = num2.length();
+    if (m > n) {
+      String temp = num1;
+      num1 = num2;
+      num2 = temp;
+      int temp2 = m;
+      m = n;
+      n = temp2;
+    }
+    StringBuilder sb = new StringBuilder();
+    int offset = 0;
+    for (int i = m - 1; i >= 0; i--) {
+      char c1 = num1.charAt(i), c2 = num2.charAt(i + n - m);
+      int add = c1 - '0' + c2 - '0' + offset;
+      sb.append(add % 10);
+      offset = add / 10;
+    }
+    for (int i = n - m - 1; i >= 0; i--) {
+      char c2 = num2.charAt(i);
+      int add = c2 - '0' + offset;
+      sb.append(add % 10);
+      offset = add / 10;
+    }
+    if (offset > 0) {
+      sb.append(offset);
+    }
+    return sb.reverse().toString();
   }
 
   public String reverseStr(String s, int k) {
