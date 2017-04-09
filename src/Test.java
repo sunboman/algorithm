@@ -5642,7 +5642,7 @@ public class Test {
       if (Character.isDigit(c)) {
         num = num * 10 + c - '0';
       }
-      if ((!Character.isDigit(c) && c != ' ' )|| i == n - 1) {
+      if ((!Character.isDigit(c) && c != ' ') || i == n - 1) {
         switch (op) {
           case '+':
             stack.push(num);
@@ -5672,7 +5672,7 @@ public class Test {
     if (points == null || points.length == 0) {
       return 0;
     }
-    Arrays.sort(points,(a, b) -> {
+    Arrays.sort(points, (a, b) -> {
       if (a[0] != b[0]) {
         return a[0] - b[0];
       } else {
@@ -5689,6 +5689,44 @@ public class Test {
       }
     }
     return res;
+  }
+
+  public char[][] updateBoard(char[][] board, int[] click) {
+    int x = click[0], y = click[1];
+    if (board[x][y] == 'M') {
+      board[x][y] = 'X';
+      return board;
+    }
+    int n = board.length, m = board[0].length;
+    LinkedList<int[]> queue = new LinkedList<>();
+    queue.offer(click);
+    int[][] d = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}, {1, 1}, {-1, -1}, {1, -1}, {-1, 1}};
+    while (!queue.isEmpty()) {
+      int size = queue.size();
+      for (int i = 0; i < size; i++) {
+        int[] curr = queue.poll();
+        int mines = 0;
+        List<int[]> nextList = new ArrayList<>();
+        for (int k = 0; k < 8; k++) {
+          int newX = curr[0] + d[k][0];
+          int newY = curr[1] + d[k][1];
+          if (newX < 0 || newX >= n || newY < 0 || newY >= m) {
+            continue;
+          }
+          if (mines == 0) nextList.add(new int[]{x, y});
+          if (board[newX][newY] == 'M') {
+            mines++;
+          }
+        }
+        if (mines == 0) {
+          queue.addAll(nextList);
+          board[curr[0]][curr[1]] = 'B';
+        } else {
+          board[curr[0]][curr[1]] = (char)(mines + '0');
+        }
+      }
+    }
+    return board;
   }
 
   public static void main(String[] args) {
