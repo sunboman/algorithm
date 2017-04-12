@@ -5359,6 +5359,7 @@ public class Test {
     }
     return true;
   }
+
   public boolean detectCapitalUse(String word) {
     int count = 0;
     for (char c : word.toCharArray()) {
@@ -5388,6 +5389,7 @@ public class Test {
     }
     return -1;
   }
+
   public String addStrings(String num1, String num2) {
     if (num1 == null || num1.length() == 0) {
       return num2;
@@ -5775,7 +5777,7 @@ public class Test {
           queue.addAll(nextList);
           board[curr[0]][curr[1]] = 'B';
         } else {
-          board[curr[0]][curr[1]] = (char)(mines + '0');
+          board[curr[0]][curr[1]] = (char) (mines + '0');
         }
       }
     }
@@ -5784,7 +5786,7 @@ public class Test {
 
   public static void main(String[] args) {
 //    new Test().wiggleSort(new int[]{1, 5, 1, 1, 6, 4});
-    new Test().calculate("0/1");
+
   }
 }
 
