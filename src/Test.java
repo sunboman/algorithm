@@ -5783,10 +5783,18 @@ public class Test {
     }
     return board;
   }
+  public int hammingDistance(int x, int y) {
+    int res = 0;
+    for (int i = 0; i < 32; i++) {
+      res += Math.abs(((x >> i) & 1) - ((y >> i) & 1));
+    }
+    return res;
+  }
   public static void main(String[] args) {
-//    new Test().wiggleSort(new int[]{1, 5, 1, 1, 6, 4});
-    int r = Arrays.binarySearch(new int[]{1, 2, 5}, 4);
-
+    TreeSet<Integer> max = new TreeSet<>((a, b) -> a - b);
+    max.add(3);
+    max.add(1);
+    int res = max.first();
   }
 }
 

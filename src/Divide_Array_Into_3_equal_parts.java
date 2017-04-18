@@ -64,7 +64,9 @@ public class Divide_Array_Into_3_equal_parts {
     return false;
   }
 
+
+
   public static void main(String[] args) {
-    String s = new Divide_Array_Into_3_equal_parts().divide(new int[]{1, 2, 2, 2, 5});
+
   }
 }
