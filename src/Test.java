@@ -5831,8 +5831,9 @@ public class Test {
     return res;
   }
 
+
   public static void main(String[] args) {
-    new Test().splitLoopedString(new String[]{"abc", "xyz"});
+
   }
 }
 
