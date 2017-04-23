@@ -5783,6 +5783,7 @@ public class Test {
     }
     return board;
   }
+
   public int hammingDistance(int x, int y) {
     int res = 0;
     for (int i = 0; i < 32; i++) {
@@ -5790,11 +5791,48 @@ public class Test {
     }
     return res;
   }
+
+  public int rangeBitwiseAnd(int m, int n) {
+    if (m == n) return m;
+    int temp = Integer.highestOneBit(n);
+    while ((m & temp) == (n & temp)) {
+      temp |= (temp >>> 1);
+    }
+    return m & temp;
+  }
+
+  public String splitLoopedString(String[] strs) {
+    char max = 'a';
+    for (int i = 0; i < strs.length; i++) {
+      for (char c : strs[i].toCharArray()) {
+        if (c > max) max = c;
+      }
+      String rev = new StringBuilder(strs[i]).reverse().toString();
+      if (strs[i].compareTo(rev) < 0) strs[i] = rev;
+    }
+
+    String res = "";
+    for (int i = 0; i < strs.length; i++) {
+      String rev = new StringBuilder(strs[i]).reverse().toString();
+      for (String st : new String[]{strs[i], rev}) {
+        for (int k = 0; k < st.length(); k++) {
+          if (st.charAt(k) != max) continue;
+          StringBuilder t = new StringBuilder(st.substring(k));
+          for (int j = i + 1; j < strs.length; j++)
+            t.append(strs[j]);
+          for (int j = 0; j < i; j++)
+            t.append(strs[j]);
+          t.append(st.substring(0, k));
+          if (t.toString().compareTo(res) > 0)
+            res = t.toString();
+        }
+      }
+    }
+    return res;
+  }
+
   public static void main(String[] args) {
-    TreeSet<Integer> max = new TreeSet<>((a, b) -> a - b);
-    max.add(3);
-    max.add(1);
-    int res = max.first();
+    new Test().splitLoopedString(new String[]{"abc", "xyz"});
   }
 }
 
