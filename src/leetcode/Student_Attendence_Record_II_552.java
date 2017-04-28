@@ -7,21 +7,17 @@ public class Student_Attendence_Record_II_552 {
   int m = 1000000007;
 
   public int checkRecord(int n) {
-    long[] p = new long[n + 1];
-    long[] porl = new long[n + 1];
-    p[0] = 1;
-    porl[0] = 1;
-    p[1] = 1;
-    porl[1] = 2;
-    for (int i = 2; i <= n; i++) {
-      p[i] = porl[i - 1];
-      porl[i] = (p[i] + p[i - 1] + p[i - 2]) % m;
-    }
-    long res = porl[n];
+    long a0l0 = 1, a0l1 = 0, a0l2 = 0, a1l0 = 0, a1l1 = 0, a1l2 = 0;
     for (int i = 0; i < n; i++) {
-      long temp = (porl[i] * porl[n - i - 1]) % m;
-      res = (res + temp) % m;
+      long a0l0_ = (a0l0 + a0l1 + a0l2) % m;
+      a0l2 = a0l1;
+      a0l1 = a0l0;
+      a0l0 = a0l0_;
+      long a1l0_ = (a0l0 + a1l0 + a1l1 + a1l2) % m;
+      a1l2 = a1l1;
+      a1l1 = a1l0;
+      a1l0 = a1l0_;
     }
-    return (int) res;
+    return (int) ((a0l0 + a0l1 + a0l2 + a1l0 + a1l1 + a1l2) % m);
   }
 }
