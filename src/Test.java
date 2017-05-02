@@ -5831,9 +5831,72 @@ public class Test {
     return res;
   }
 
+  public int subarraySum(int[] nums, int k) {
+    if (nums == null || nums.length == 0) return 0;
+    int n = nums.length;
+    Map<Integer, List<Integer>> map = new HashMap<>();
+    map.put(0, new ArrayList<>(Arrays.asList(-1)));
+    int sum = 0;
+    for (int i = 0; i < n; i++) {
+      sum += nums[i];
+      if (map.containsKey(sum)) map.get(sum).add(i);
+      else map.put(sum, new ArrayList<>(Arrays.asList(i)));
+    }
+    int res = 0;
+    sum = 0;
+    for (int i = 0; i <= n; i++) {
+      List<Integer> list = map.getOrDefault(sum + k, new ArrayList<>());
+      int idx = Collections.binarySearch(list, i);
+      if (idx < 0) {
+        idx = -(idx + 1);
+      }
+      res += list.size() - idx;
+      if (i < n) sum += nums[i];
+    }
+    return res;
+  }
+
+  public boolean checkInclusion(String s1, String s2) {
+    if (s1 == null || s1.length() == 0) return true;
+    int n = s1.length(), m = s2.length();
+    if (n > m) return false;
+    int[] hash = new int[26];
+    Set<Character> set = new HashSet<>();
+    for (char c : s1.toCharArray()) {
+      set.add(c);
+      hash[c - 'a']++;
+    }
+    int[] array = Arrays.copyOf(hash, 26);
+    int count = 0;
+    int left = 0, right = 0;
+    while (left <= m - n) {
+      char c = s2.charAt(right);
+      if (!set.contains(c)) {
+        left = right + 1;
+        right = left;
+        count = 0;
+        hash = Arrays.copyOf(array, 26);
+        continue;
+      }
+      if (hash[c - 'a'] == 0) {
+        while (hash[c - 'a'] == 0 && left <= m - n && count > 0) {
+          count--;
+          hash[s2.charAt(left) - 'a']++;
+          left++;
+        }
+      }
+      hash[c - 'a']--;
+      count++;
+      if (count == n) {
+        return true;
+      }
+      right++;
+    }
+    return false;
+  }
 
   public static void main(String[] args) {
-
+    new Test().checkInclusion("pqzhi", "ghrqpihzybre");
   }
 }
 
