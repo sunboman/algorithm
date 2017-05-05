@@ -5895,8 +5895,81 @@ public class Test {
     return false;
   }
 
+  //330 patching array
+  public int minPatches(int[] nums, int n) {
+    long missing = 1;
+    int res = 0, idx = 0;
+    while (missing <= n) {
+      if (idx < nums.length && nums[idx] <= missing) {
+        missing += nums[idx++];
+      } else {
+        missing += missing;
+        res++;
+      }
+    }
+    return res;
+  }
+
+  //399. Evaluate Division
+  public double[] calcEquation(String[][] equations, double[] values, String[][] queries) {
+    Map<String, List<String>> nodes = new HashMap<>();
+    Map<String, List<Double>> valueNodes = new HashMap<>();
+    int n = values.length;
+    for (int i = 0; i < n; i++) {
+      if (!nodes.containsKey(equations[i][0])) {
+        nodes.put(equations[i][0], new ArrayList<>());
+        valueNodes.put(equations[i][0], new ArrayList<>());
+      }
+      if (!nodes.containsKey(equations[i][1])) {
+        nodes.put(equations[i][1], new ArrayList<>());
+        valueNodes.put(equations[i][1], new ArrayList<>());
+      }
+      nodes.get(equations[i][0]).add(equations[i][1]);
+      valueNodes.get(equations[i][0]).add(values[i]);
+      nodes.get(equations[i][1]).add(equations[i][0]);
+      valueNodes.get(equations[i][1]).add(1.0 / values[i]);
+    }
+    int m = queries.length;
+    double[] res = new double[m];
+    for (int i = 0; i < m; i++) {
+      if (!nodes.containsKey(queries[i][0]) || !nodes.containsKey(queries[i][1])) {
+        res[i] = -1.0;
+      } else {
+        double temp = dfs(nodes, valueNodes, queries[i][0], queries[i][1], new HashSet<>(), 1.0);
+        res[i] = temp == 0.0 ? -1.0 : temp;
+      }
+    }
+    return res;
+  }
+
+
+  private double dfs(Map<String, List<String>> nodes, Map<String, List<Double>> valueNodes,
+                     String left, String right, Set<String> onStack, double preRes) {
+    if (left.equals(right)) {
+      return preRes;
+    }
+    if (onStack.contains(left)) {
+      return 0.0;
+    }
+    onStack.add(left);
+    List<String> nodeList = nodes.get(left);
+    List<Double> valuesList = valueNodes.get(left);
+    double res = 0.0;
+    for (int i = 0; i < nodeList.size(); i++) {
+      res = dfs(nodes, valueNodes, nodeList.get(i), right, onStack, preRes * valuesList.get(i));
+      if (res != 0.0) {
+        break;
+      }
+    }
+    onStack.remove(left);
+    return res;
+  }
+
   public static void main(String[] args) {
-    new Test().checkInclusion("pqzhi", "ghrqpihzybre");
+    new Test().calcEquation(new String[][]{{"a", "b"}, {"b", "c"}},
+            new double[]{2.0, 3.0},
+            new String[][]{{"a", "c"}, {"b", "c"}, {"a", "e"}, {"a", "a"}, {"x", "x"}}
+    );
   }
 }
 
