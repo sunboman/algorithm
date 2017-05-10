@@ -82,6 +82,51 @@ public class Alien_Dictionary_269 {
     }
   }
 
+  public String alienOrder_BFS(List<String> input) {
+    Map<Character, Set<Character>> map = new HashMap<>();
+    Map<Character, Integer> degree = new HashMap<>();
+    int n = input.size();
+    for (int i = 0; i < n; i++) {
+      String c = input.get(i);
+      for (char cc : c.toCharArray()) {
+        degree.putIfAbsent(cc, 0);
+      }
+      if (i == 0) {
+        continue;
+      }
+      String p = input.get(i - 1);
+      int len = Math.min(p.length(), c.length());
+      for (int j = 0; j < len; j++) {
+        if (p.charAt(j) != c.charAt(j)) {
+          map.computeIfAbsent(p.charAt(j), k -> new HashSet<>()).add(c.charAt(j));
+          degree.put(c.charAt(j), degree.getOrDefault(c.charAt(j), 0) + 1);
+          break;
+        }
+      }
+    }
+    LinkedList<Character> queue = new LinkedList<>();
+    for (char ch : degree.keySet()) {
+      if (degree.get(ch) == 0)
+        queue.offer(ch);
+    }
+    StringBuilder sb = new StringBuilder();
+    while (!queue.isEmpty()) {
+      char ch = queue.poll();
+      sb.append(ch);
+      if (map.containsKey(ch)) {
+        for (char next : map.get(ch)) {
+          degree.put(next, degree.get(next) - 1);
+          if (degree.get(next) == 0) {
+            queue.offer(next);
+          }
+        }
+      }
+    }
+
+    if (sb.length() == degree.keySet().size()) return sb.toString();
+    else return "";
+  }
+
   public static void main(String[] args) {
     List<String> list = new ArrayList<>();
     String[] str = new String[]{"wrt",
@@ -91,6 +136,6 @@ public class Alien_Dictionary_269 {
             "rftt"
     };
     list.addAll(Arrays.asList(str));
-    String res = new Alien_Dictionary_269().alienOrder(list);
+    String res = new Alien_Dictionary_269().alienOrder_BFS(list);
   }
 }
