@@ -5964,12 +5964,27 @@ public class Test {
     onStack.remove(left);
     return res;
   }
-
+  public List<String> letterCombinations(String digits) {
+    String[] map = new String[]{"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+    int[] dig = new int[digits.length()];
+    for (int i = 0; i < digits.length(); i++) {
+      dig[i] = digits.charAt(i) - '0';
+    }
+    LinkedList<String> queue = new LinkedList<>();
+    queue.offer("");
+    for (int i = 0; i < dig.length; i++) {
+      String str = map[dig[i]];
+      while (queue.peek().length() == i) {
+        String temp = queue.remove();
+        for (char c : str.toCharArray()) {
+          queue.add(c + temp);
+        }
+      }
+    }
+    return new ArrayList<>(queue);
+  }
   public static void main(String[] args) {
-    new Test().calcEquation(new String[][]{{"a", "b"}, {"b", "c"}},
-            new double[]{2.0, 3.0},
-            new String[][]{{"a", "c"}, {"b", "c"}, {"a", "e"}, {"a", "a"}, {"x", "x"}}
-    );
+    new Test().letterCombinations("23");
   }
 }
 
