@@ -5964,6 +5964,7 @@ public class Test {
     onStack.remove(left);
     return res;
   }
+
   public List<String> letterCombinations(String digits) {
     String[] map = new String[]{"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
     int[] dig = new int[digits.length()];
@@ -5983,8 +5984,64 @@ public class Test {
     }
     return new ArrayList<>(queue);
   }
+
+  public List<String> wordBreak(String s, List<String> wordDict) {
+    if (s == null || s.length() == 0 || wordDict == null || wordDict.size() == 0) {
+      return new ArrayList<>();
+    }
+    int n = s.length();
+    Set<String> wordDictSet = new HashSet<>(wordDict);
+    int maxLen = 0;
+    for (String word : wordDictSet) maxLen = Math.max(maxLen, word.length());
+    List<String>[] lists = new List[n + 1];
+    lists[0] = new ArrayList<>();
+    for (int i = 0; i <= n; i++) {
+      if (lists[i] == null) {
+        continue;
+      }
+      for (int j = i + 1; j <= n && j - i <= maxLen; j++) {
+        if (wordDictSet.contains(s.substring(i, j))) {
+          if (lists[j] == null) {
+            lists[j] = new ArrayList<>();
+          }
+          lists[j].add(s.substring(i, j));
+        }
+      }
+    }
+    if (lists[n] == null || lists[n].size() == 0) {
+      return new ArrayList<>();
+    }
+    List<List<String>> res = new ArrayList<>();
+    dfs(lists, n, new ArrayList<>(), res);
+    return res.stream()
+            .map(e -> {
+              Collections.reverse(e);
+              return String.join(" ", e).trim();
+            })
+            .collect(Collectors.toList());
+  }
+
+  private void dfs(List<String>[] lists, int index, List<String> path, List<List<String>> res) {
+    if (index < 0) {
+      return;
+    }
+    if (index == 0) {
+      res.add(new ArrayList<>(path));
+      return;
+    }
+    List<String> words = lists[index];
+    for (String word : words) {
+      path.add(word);
+      int len = word.length();
+      dfs(lists, index - len, path, res);
+      path.remove(path.size() - 1);
+    }
+  }
+
   public static void main(String[] args) {
-    new Test().letterCombinations("23");
+    List<String> res = new Test().wordBreak("a", Arrays.asList(new String[]{
+            "b"
+    }));
   }
 }
 
