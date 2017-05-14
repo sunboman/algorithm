@@ -6038,10 +6038,26 @@ public class Test {
     }
   }
 
+  public String getPath(String input) {
+    String[] inputs = input.split("/");
+    int n = inputs.length;
+    StringBuilder res = new StringBuilder();
+    for (int i = n - 1; i >= 0; i--) {
+      String str = inputs[i];
+      if (str.equals(".")) {
+        continue;
+      } else if (str.equals("..")) {
+        i--;
+      } else {
+        res.append(str).append("/");
+      }
+    }
+    res.deleteCharAt(res.length() - 1);
+    return res.reverse().toString();
+  }
+
   public static void main(String[] args) {
-    List<String> res = new Test().wordBreak("a", Arrays.asList(new String[]{
-            "b"
-    }));
+    String res = new Test().getPath("/a/b/./c/../d");
   }
 }
 
